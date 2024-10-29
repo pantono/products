@@ -5,6 +5,8 @@ namespace Pantono\Products\Repository;
 use Pantono\Database\Repository\MysqlRepository;
 use Pantono\Products\Model\Product;
 use Pantono\Products\Model\ProductImage;
+use Pantono\Products\Filter\ProductFilter;
+use Pantono\Products\Filter\CategoryFilter;
 
 class ProductsRepository extends MysqlRepository
 {
@@ -119,5 +121,56 @@ class ProductsRepository extends MysqlRepository
     public function getCategoryById(int $id): ?array
     {
         return $this->selectSingleRow('category', 'id', $id);
+    }
+
+    public function getCategoryBySlug(string $slug): ?array
+    {
+        return $this->selectSingleRow('category', 'slug', $slug);
+    }
+
+    public function getProductBySlug(string $slug): ?array
+    {
+        return $this->selectSingleRow('product', 'slug', $slug);
+    }
+
+    public function getProductsByFilter(ProductFilter $filter): array
+    {
+        $select = $this->getDb()->select()->from('product');
+        if ($filter->getSearch() !== null) {
+            $select->where('(product.name like ?', '%' . $filter->getSearch() . '%')
+                ->orWhere('product.description like ?)', '%' . $filter->getSearch() . '%');
+        }
+        if ($filter->getCategory() !== null) {
+            $select->joinInner('product_category', 'product_category.product_id=product.id', [])
+                ->where('product_category.category_id=?', $filter->getCategory()->getId());
+        }
+        if ($filter->getStatus() !== null) {
+            $select->where('product.status_id=?', $filter->getStatus()->getId());
+        }
+        foreach ($filter->getColumns() as $column) {
+            $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);
+        }
+        $filter->setTotalResults($this->getCount($select));
+        $select->limitPage($filter->getPage(), $filter->getPerPage());
+        return $this->getDb()->fetchAll($select);
+    }
+
+    public function getCategoriesByFilter(CategoryFilter $filter): array
+    {
+        $select = $this->getDb()->select()->from('category');
+
+        if ($filter->getSearch() !== null) {
+            $select->where('(name like ?', '%' . $filter->getSearch() . '%')
+                ->orWhere('description like ?)', '%' . $filter->getSearch() . '%');
+        }
+        if ($filter->getSlug() !== null) {
+            $select->where('slug=?', $filter->getSlug());
+        }
+        foreach ($filter->getColumns() as $column) {
+            $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);
+        }
+        $filter->setTotalResults($this->getCount($select));
+        $select->limitPage($filter->getPage(), $filter->getPerPage());
+        return $this->getDb()->fetchAll($select);
     }
 }

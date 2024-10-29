@@ -97,8 +97,9 @@ final class Products extends AbstractMigration
             ->addColumn('meta_title', 'text', ['null' => true])
             ->addColumn('meta_keywords', 'text', ['null' => true])
             ->addColumn('meta_robots', 'text', ['null' => true])
-            ->addColumn('')
+            ->addColumn('image_id', 'integer', ['null' => true])
             ->addIndex('slug', ['unique' => true])
+            ->addForeignKey('image_id', 'stored_file', 'id')
             ->create();
 
         $this->table('product_category')
