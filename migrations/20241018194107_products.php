@@ -32,7 +32,7 @@ final class Products extends AbstractMigration
             ->addColumn('name', 'string')
             ->create();
 
-        $this->table('brand')
+        $this->table('product_brand')
             ->addColumn('name', 'string')
             ->create();
 
@@ -52,7 +52,7 @@ final class Products extends AbstractMigration
             ->addColumn('meta_title', 'text', ['null' => true])
             ->addColumn('meta_keywords', 'text', ['null' => true])
             ->addColumn('meta_robots', 'text', ['null' => true])
-            ->addColumn('brand_id', 'integer', ['null' => true])
+            ->addColumn('brand_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('condition_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('price', 'float', ['null' => true])
             ->addColumn('rrp', 'float', ['null' => true])
@@ -61,7 +61,7 @@ final class Products extends AbstractMigration
             ->addForeignKey('status_id', 'product_status', 'id')
             ->addForeignKey('vat_rate_id', 'product_vat_rate', 'id')
             ->addForeignKey('condition_id', 'product_condition', 'id')
-            ->addForeignKey('brand_id', 'brand', 'id')
+            ->addForeignKey('brand_id', 'product_brand', 'id')
             ->addForeignKey('type_id', 'product_type', 'id')
             ->create();
 
