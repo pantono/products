@@ -59,7 +59,7 @@ final class Products extends AbstractMigration
             ->addIndex('code', ['unique' => true])
             ->addIndex('slug', ['unique' => true])
             ->addForeignKey('status_id', 'product_status', 'id')
-            ->addForeignKey('vat_rate_id', 'vat_rate', 'id')
+            ->addForeignKey('vat_rate_id', 'product_vat_rate', 'id')
             ->addForeignKey('condition_id', 'product_condition', 'id')
             ->addForeignKey('brand_id', 'brand', 'id')
             ->addForeignKey('type_id', 'product_type', 'id')
