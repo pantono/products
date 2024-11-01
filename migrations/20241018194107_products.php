@@ -66,12 +66,12 @@ final class Products extends AbstractMigration
             ->create();
 
         $this->table('product_image', ['id' => false, 'primary_key' => ['product_id', 'image_id']])
-            ->addColumn('product_id', 'integer', ['signed' => false])
-            ->addColumn('image_id', 'integer', ['signed' => false])
+            ->addColumn('product_id', 'integer', ['null' => false, 'signed' => false])
+            ->addColumn('image_id', 'integer', ['null' => false, 'signed' => false])
             ->addColumn('main_image', 'boolean')
             ->addColumn('deleted', 'boolean')
             ->addForeignKey('product_id', 'product', 'id')
-            ->addForeignKey('image_id', 'image', 'id')
+            ->addForeignKey('image_id', 'stored_file', 'id')
             ->create();
 
         $this->table('product_auction')
@@ -84,9 +84,11 @@ final class Products extends AbstractMigration
             ->addColumn('auction_estimate_end', 'float')
             ->create();
 
-        $this->table('product_related')
-            ->addColumn('source_product', 'integer')
-            ->addColumn('target_product', 'integer')
+        $this->table('product_related', ['id' => false, 'primary_key' => ['source_product', 'target_product']])
+            ->addColumn('source_product', 'integer', ['null' => false, 'signed' => false])
+            ->addColumn('target_product', 'integer', ['null' => false, 'signed' => false])
+            ->addForeignKey('source_product', 'product', 'id')
+            ->addForeignKey('target_product', 'product', 'id')
             ->create();
 
         $this->table('category')
@@ -109,15 +111,15 @@ final class Products extends AbstractMigration
             ->addColumn('archived', 'boolean')
             ->addForeignKey('product_id', 'product', 'id')
             ->addForeignKey('category_id', 'category', 'id')
-            ->update();
+            ->create();
 
         $this->table('flag')
             ->addColumn('name', 'string')
             ->create();
 
         $this->table('product_flag', ['id' => false, 'primary_key' => ['product_id', 'flag_id']])
-            ->addColumn('product_id', 'integer', ['signed' => false])
-            ->addColumn('flag_id', 'integer', ['signed' => false])
+            ->addColumn('product_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('flag_id', 'integer', ['signed' => false, 'null' => false])
             ->addForeignKey('flag_id', 'flag', 'id')
             ->addForeignKey('product_id', 'product', 'id')
             ->create();
