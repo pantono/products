@@ -6,6 +6,7 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Customers\Model\Company;
 
 #[Locator(methodName: 'getProductById', className: Products::class)]
 class Product
@@ -20,7 +21,9 @@ class Product
     private string $code;
     private string $slug;
     private string $description;
+    #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Products::class)]
     private ProductStatus $status;
+    #[FieldName('vat_rate_id'), Locator(methodName: 'getVatRateById', className: Products::class)]
     private ProductVatRate $vatRate;
     private float $weight;
     private int $stockHolding;
@@ -32,6 +35,7 @@ class Product
     private ?int $conditionId;
     private float $price;
     private float $rrp;
+    private ?Company $company = null;
     /**
      * @var ProductImage[]
      */
@@ -39,8 +43,16 @@ class Product
     private array $images = [];
     #[Locator(methodName: 'getCategoriesForProduct', className: Products::class), FieldName('$this')]
     private array $categories = [];
+    /**
+     * @var Product[]
+     */
     #[Locator(methodName: 'getRelatedProducts', className: Products::class), FieldName('$this')]
     private array $related = [];
+    /**
+     * @var Flag[]
+     */
+    #[Locator(methodName: 'getFlagsForProduct', className: Product::class), FieldName('$this')]
+    private array $flags;
 
     public function getId(): ?int
     {
@@ -232,6 +244,16 @@ class Product
         $this->price = $price;
     }
 
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): void
+    {
+        $this->company = $company;
+    }
+
     public function getRrp(): float
     {
         return $this->rrp;
@@ -270,5 +292,15 @@ class Product
     public function setRelated(array $related): void
     {
         $this->related = $related;
+    }
+
+    public function getFlags(): array
+    {
+        return $this->flags;
+    }
+
+    public function setFlags(array $flags): void
+    {
+        $this->flags = $flags;
     }
 }
