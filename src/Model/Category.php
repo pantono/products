@@ -4,9 +4,15 @@ namespace Pantono\Products\Model;
 
 use Pantono\Storage\Model\StoredFile;
 use Pantono\Contracts\Attributes\FieldName;
+use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Storage\FileStorage;
+use Pantono\Products\Categories;
 
 class Category
 {
+    use SavableModel;
+
     private ?int $id = null;
     private string $title;
     private string $slug;
@@ -15,8 +21,10 @@ class Category
     private ?string $metaTitle = null;
     private ?string $metaKeywords = null;
     private ?string $metaRobots = null;
-    #[FieldName('image_id')]
+    #[FieldName('image_id'), Locator(methodName: 'getCategoryById', className: FileStorage::class)]
     private ?StoredFile $image = null;
+    #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Categories::class)]
+    private ?CategoryStatus $status;
 
     public function getId(): ?int
     {
@@ -106,5 +114,15 @@ class Category
     public function setImage(?StoredFile $image): void
     {
         $this->image = $image;
+    }
+
+    public function getStatus(): ?CategoryStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?CategoryStatus $status): void
+    {
+        $this->status = $status;
     }
 }

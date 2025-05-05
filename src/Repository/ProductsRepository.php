@@ -4,9 +4,7 @@ namespace Pantono\Products\Repository;
 
 use Pantono\Database\Repository\MysqlRepository;
 use Pantono\Products\Model\Product;
-use Pantono\Products\Model\ProductImage;
 use Pantono\Products\Filter\ProductFilter;
-use Pantono\Products\Filter\CategoryFilter;
 
 class ProductsRepository extends MysqlRepository
 {
@@ -118,16 +116,6 @@ class ProductsRepository extends MysqlRepository
         return $this->getDb()->fetchAll($select);
     }
 
-    public function getCategoryById(int $id): ?array
-    {
-        return $this->selectSingleRow('category', 'id', $id);
-    }
-
-    public function getCategoryBySlug(string $slug): ?array
-    {
-        return $this->selectSingleRow('category', 'slug', $slug);
-    }
-
     public function getProductBySlug(string $slug): ?array
     {
         return $this->selectSingleRow('product', 'slug', $slug);
@@ -155,22 +143,12 @@ class ProductsRepository extends MysqlRepository
         return $this->getDb()->fetchAll($select);
     }
 
-    public function getCategoriesByFilter(CategoryFilter $filter): array
+    public function getFlagsForProduct(Product $product): array
     {
-        $select = $this->getDb()->select()->from('category');
+        $select = $this->getDb()->select()->from('product_flag', [])
+            ->joinInner('flag', 'flag.id=product_flag.flag_id')
+            ->where('product_flag.product_id=?', $product->getId());
 
-        if ($filter->getSearch() !== null) {
-            $select->where('(name like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('description like ?)', '%' . $filter->getSearch() . '%');
-        }
-        if ($filter->getSlug() !== null) {
-            $select->where('slug=?', $filter->getSlug());
-        }
-        foreach ($filter->getColumns() as $column) {
-            $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);
-        }
-        $filter->setTotalResults($this->getCount($select));
-        $select->limitPage($filter->getPage(), $filter->getPerPage());
         return $this->getDb()->fetchAll($select);
     }
 }

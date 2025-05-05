@@ -16,6 +16,7 @@ use Pantono\Products\Event\PostProductSaveEvent;
 use Pantono\Products\Model\Category;
 use Pantono\Products\Filter\ProductFilter;
 use Pantono\Products\Filter\CategoryFilter;
+use Pantono\Products\Model\Flag;
 
 class Products
 {
@@ -63,11 +64,6 @@ class Products
         return $this->hydrator->hydrate(ProductCategory::class, $this->repository->getProductCategoryById($id));
     }
 
-    public function getCategoryById(int $id): ?Category
-    {
-        return $this->hydrator->hydrate(Category::class, $this->repository->getCategoryById($id));
-    }
-
     /**
      * @return ProductCategory[]
      */
@@ -89,14 +85,14 @@ class Products
         return $this->hydrator->hydrateSet(Product::class, $this->repository->getRelatedProducts($product));
     }
 
-    public function getCategoryBySlug(string $slug): ?Category
-    {
-        return $this->hydrator->hydrate(Category::class, $this->repository->getCategoryBySlug($slug));
-    }
-
     public function getProductBySlug(string $slug): ?Product
     {
         return $this->hydrator->hydrate(Product::class, $this->repository->getProductBySlug($slug));
+    }
+
+    public function getFlagsForProduct(Product $product): array
+    {
+        return $this->hydrator->hydrateSet(Flag::class, $this->repository->getFlagsForProduct($product));
     }
 
     /**
@@ -105,14 +101,6 @@ class Products
     public function getProductsByFilter(ProductFilter $filter): array
     {
         return $this->hydrator->hydrateSet(Product::class, $this->repository->getProductsByFilter($filter));
-    }
-
-    /**
-     * @return Category[]
-     */
-    public function getCategoriesByFilter(CategoryFilter $filter): array
-    {
-        return $this->hydrator->hydrateSet(Category::class, $this->repository->getCategoriesByFilter($filter));
     }
 
     public function saveProduct(Product $product): void

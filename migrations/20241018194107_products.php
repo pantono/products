@@ -56,6 +56,7 @@ final class Products extends AbstractMigration
             ->addColumn('condition_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('price', 'float', ['null' => true])
             ->addColumn('rrp', 'float', ['null' => true])
+            ->addColumn('company_id', 'integer', ['null' => true, 'signed' => false])
             ->addIndex('code', ['unique' => true])
             ->addIndex('slug', ['unique' => true])
             ->addForeignKey('status_id', 'product_status', 'id')
@@ -63,6 +64,7 @@ final class Products extends AbstractMigration
             ->addForeignKey('condition_id', 'product_condition', 'id')
             ->addForeignKey('brand_id', 'product_brand', 'id')
             ->addForeignKey('type_id', 'product_type', 'id')
+            ->addForeignKey('company_id', 'company', 'id')
             ->create();
 
         $this->table('product_image', ['id' => false, 'primary_key' => ['product_id', 'image_id']])
@@ -91,6 +93,11 @@ final class Products extends AbstractMigration
             ->addForeignKey('target_product', 'product', 'id')
             ->create();
 
+        $this->table('category_status')
+            ->addColumn('name', 'string')
+            ->addColumn('visible', 'boolean')
+            ->create();
+
         $this->table('category')
             ->addColumn('title', 'string')
             ->addColumn('slug', 'string')
@@ -100,8 +107,10 @@ final class Products extends AbstractMigration
             ->addColumn('meta_keywords', 'text', ['null' => true])
             ->addColumn('meta_robots', 'text', ['null' => true])
             ->addColumn('image_id', 'integer', ['null' => true, 'signed' => false])
+            ->addColumn('status_id', 'integer', ['signed' => false, 'null' => false])
             ->addIndex('slug', ['unique' => true])
             ->addForeignKey('image_id', 'stored_file', 'id')
+            ->addForeignKey('status_id', 'category_status', 'id')
             ->create();
 
         $this->table('product_category')
