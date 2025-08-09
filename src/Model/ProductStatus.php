@@ -13,6 +13,8 @@ class ProductStatus
     private bool $visible;
     private bool $purchasable;
     private bool $archived;
+    private bool $inReview;
+    private bool $editable;
 
     public function getId(): ?int
     {
@@ -62,5 +64,25 @@ class ProductStatus
     public function setArchived(bool $archived): void
     {
         $this->archived = $archived;
+    }
+
+    public function isInReview(): bool
+    {
+        return $this->inReview;
+    }
+
+    public function setInReview(bool $inReview): void
+    {
+        $this->inReview = $inReview;
+    }
+
+    public function isEditable(): bool
+    {
+        return $this->editable;
+    }
+
+    public function setEditable(bool $editable): void
+    {
+        $this->editable = $editable;
     }
 }

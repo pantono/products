@@ -1,0 +1,2 @@
+ProductEvents:
+  class: Pantono\Products\Events\ProductVersionEvents

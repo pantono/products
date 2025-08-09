@@ -9,6 +9,7 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Storage\FileStorage;
 use Pantono\Products\Categories;
 
+#[Locator(methodName: 'getCategoryById', className: Categories::class)]
 class Category
 {
     use SavableModel;

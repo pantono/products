@@ -8,7 +8,7 @@ use Pantono\Products\Model\Product;
 abstract class AbstractProductSaveEvent extends Event
 {
     private Product $current;
-    private ?Product $previous;
+    private ?Product $previous = null;
 
     public function getCurrent(): Product
     {

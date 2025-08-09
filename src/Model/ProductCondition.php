@@ -3,14 +3,13 @@
 namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Categories;
+use Pantono\Products\Products;
 
-#[Locator(methodName: 'getStatusById', className: Categories::class)]
-class CategoryStatus
+#[Locator(methodName: 'getConditionById', className: Products::class)]
+class ProductCondition
 {
     private ?int $id = null;
     private string $name;
-    private bool $visible;
 
     public function getId(): ?int
     {
@@ -30,15 +29,5 @@ class CategoryStatus
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function isVisible(): bool
-    {
-        return $this->visible;
-    }
-
-    public function setVisible(bool $visible): void
-    {
-        $this->visible = $visible;
     }
 }

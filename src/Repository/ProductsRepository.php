@@ -3,8 +3,9 @@
 namespace Pantono\Products\Repository;
 
 use Pantono\Database\Repository\MysqlRepository;
-use Pantono\Products\Model\Product;
+use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Filter\ProductFilter;
+use Pantono\Products\Model\Product;
 
 class ProductsRepository extends MysqlRepository
 {
@@ -23,7 +24,7 @@ class ProductsRepository extends MysqlRepository
         return $this->selectSingleRow('product_status', 'id', $id);
     }
 
-    public function getImagesForProduct(Product $product): array
+    public function getImagesForProduct(ProductVersion $product): array
     {
         $select = $this->getDb()->select()->from('product_image')
             ->where('deleted=?', 0)
@@ -42,14 +43,29 @@ class ProductsRepository extends MysqlRepository
         return $this->selectSingleRow('product_image', 'id', $id);
     }
 
+    public function getProductVersionById(int $id): ?array
+    {
+        return $this->selectSingleRow('product_version', 'id', $id);
+    }
+
     public function getProductById(int $id): ?array
     {
         return $this->selectSingleRow('product', 'id', $id);
     }
 
-    public function getCategoriesForProduct(Product $product): array
+    public function getCategoriesForProduct(ProductVersion $product): array
     {
         return $this->selectRowsByValues('product_category', ['product_id' => $product->getId()], 'display_order');
+    }
+
+    public function saveProductVersion(ProductVersion $product): void
+    {
+        $id = $this->insertOrUpdateCheck('product_version', 'id', $product->getId(), $product->getAllData());
+        if ($id) {
+            $product->setId($id);
+        }
+        $this->saveImagesForProduct($product);
+        $this->saveCategoriesForProduct($product);
     }
 
     public function saveProduct(Product $product): void
@@ -58,11 +74,9 @@ class ProductsRepository extends MysqlRepository
         if ($id) {
             $product->setId($id);
         }
-        $this->saveImagesForProduct($product);
-        $this->saveCategoriesForProduct($product);
     }
 
-    private function saveCategoriesForProduct(Product $product): void
+    private function saveCategoriesForProduct(ProductVersion $product): void
     {
         $doneIds = [];
         foreach ($product->getCategories() as $category) {
@@ -82,7 +96,7 @@ class ProductsRepository extends MysqlRepository
         $this->getDb()->delete('product_category', $params);
     }
 
-    private function saveImagesForProduct(Product $product): void
+    private function saveImagesForProduct(ProductVersion $product): void
     {
         if (!$product->getId()) {
             throw new \RuntimeException('Product must be saved before saving images');
@@ -104,7 +118,7 @@ class ProductsRepository extends MysqlRepository
         $this->getDb()->delete('product_image', $params);
     }
 
-    public function getRelatedProducts(Product $product): array
+    public function getRelatedProducts(ProductVersion $product): array
     {
         $select = $this->getDb()->select()->from('product_related', [])
             ->joinInner('product', 'product_related.target_product=product.id')
@@ -143,12 +157,47 @@ class ProductsRepository extends MysqlRepository
         return $this->getDb()->fetchAll($select);
     }
 
-    public function getFlagsForProduct(Product $product): array
+    public function getFlagsForProduct(ProductVersion $product): array
     {
         $select = $this->getDb()->select()->from('product_flag', [])
             ->joinInner('flag', 'flag.id=product_flag.flag_id')
             ->where('product_flag.product_id=?', $product->getId());
 
         return $this->getDb()->fetchAll($select);
+    }
+
+    public function getFlagById(int $id): ?array
+    {
+        return $this->selectSingleRow('flag', 'id', $id);
+    }
+
+    public function getBrandById(int $id): ?array
+    {
+        return $this->selectSingleRow('product_brand', 'id', $id);
+    }
+
+    public function getAllBrands(): array
+    {
+        return $this->selectAll('product_brand');
+    }
+
+    public function getAllFlags(): array
+    {
+        return $this->selectAll('flag');
+    }
+
+    public function getConditionById(int $id): ?array
+    {
+        return $this->selectSingleRow('product_condition', 'id', $id);
+    }
+
+    public function getAllConditions(): array
+    {
+        return $this->selectAll('product_condition', 'name');
+    }
+
+    public function getAllVatRates(): array
+    {
+        return $this->selectAll('product_vat_rate', 'rate ASC');
     }
 }

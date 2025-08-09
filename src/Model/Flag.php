@@ -2,6 +2,10 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Products\Products;
+
+#[Locator(methodName: 'getFlagById', className: Products::class)]
 class Flag
 {
     private ?int $id = null;

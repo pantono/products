@@ -3,8 +3,9 @@
   "description": "Products Module for Pantono",
   "type": "library",
   "require": {
-    "php": ">=8.2",
+    "php": ">=8.3",
     "symfony/console": "^7.0",
+    "pantono/core": "^1.0",
     "pantono/database": "^1.0",
     "pantono/contracts": "^1.0",
     "pantono/hydrator": "^1.0",

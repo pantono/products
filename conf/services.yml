@@ -1,2 +1,8 @@
 Products:
   class: Pantono\Products\Products
+Categories:
+  class: Pantono\Products\Categories
+ProductApproval:
+  class: Pantono\Products\ProductApproval
+ProductHistory:
+  class: Pantono\Products\ProductHistory
