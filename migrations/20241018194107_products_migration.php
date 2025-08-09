@@ -77,7 +77,7 @@ final class ProductsMigration extends AbstractMigration
             ->addForeignKey('company_id', 'company', 'id')
             ->create();
 
-        $this->table('product_image', ['id' => false, 'primary_key' => ['product_id', 'image_id']])
+        $this->table('product_image', ['id' => false, 'primary_key' => ['version_id', 'image_id']])
             ->addColumn('version_id', 'integer', ['null' => false, 'signed' => false])
             ->addColumn('image_id', 'integer', ['null' => false, 'signed' => false])
             ->addColumn('main_image', 'boolean')
