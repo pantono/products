@@ -44,7 +44,7 @@ class Categories
 
     public function getStatusById(int $id): ?CategoryStatus
     {
-        return $this->hydrator->hydrate(CategoryStatus::class, $this->repository->getStatusById($id));
+        return $this->hydrator->hydrateCached('category_status_' . $id, CategoryStatus::class, fn() => $this->repository->getStatusById($id));
     }
 
     public function saveCategory(Category $category): void
