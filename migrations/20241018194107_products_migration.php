@@ -38,6 +38,13 @@ final class ProductsMigration extends AbstractMigration
         // Create all other tables without the circular foreign keys first
         $this->createBaseTables();
 
+        $this->table('category_status')
+            ->insert([
+                ['id' => 1, 'name' => 'Live', 'visible' => 1],
+                ['id' => 2, 'name' => 'Draft', 'visible' => 0],
+                ['id' => 3, 'name' => 'Archived', 'visible' => 0],
+            ])->saveData();
+
         // Create the product and product_version tables without foreign keys first
         $this->table('product_version')
             ->addColumn('date_added', 'datetime')
