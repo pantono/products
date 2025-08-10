@@ -26,33 +26,23 @@ final class ProductsMigration extends AbstractMigration
             ->addIndex('purchasable')
             ->create();
 
-        if ($this->isMigratingUp()) {
-            $this->table('product_status')
-                ->insert([
-                    ['id' => 1, 'name' => 'Draft', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => false, 'editable' => true],
-                    ['id' => 2, 'name' => 'Awaiting Approval', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => false],
-                    ['id' => 3, 'name' => 'Approved', 'visible' => true, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => false],
-                    ['id' => 4, 'name' => 'Amendments Required', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => true],
-                    ['id' => 5, 'name' => 'Archived', 'visible' => false, 'purchasable' => false, 'archived' => true, 'in_review' => false, 'editable' => false],
-                ])->saveData();;
-        }
+        $this->table('product_status')
+            ->insert([
+                ['id' => 1, 'name' => 'Draft', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => false, 'editable' => true],
+                ['id' => 2, 'name' => 'Awaiting Approval', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => false],
+                ['id' => 3, 'name' => 'Approved', 'visible' => true, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => false],
+                ['id' => 4, 'name' => 'Amendments Required', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => true],
+                ['id' => 5, 'name' => 'Archived', 'visible' => false, 'purchasable' => false, 'archived' => true, 'in_review' => false, 'editable' => false],
+            ])->saveData();
 
-        $this->table('product_condition')
-            ->addColumn('name', 'string')
-            ->create();
+        // Create all other tables without the circular foreign keys first
+        $this->createBaseTables();
 
-        $this->table('product_type')
-            ->addColumn('name', 'string')
-            ->create();
-
-        $this->table('product_brand')
-            ->addColumn('name', 'string')
-            ->create();
-
+        // Create the product and product_version tables without foreign keys first
         $this->table('product_version')
             ->addColumn('date_added', 'datetime')
             ->addColumn('date_updated', 'datetime')
-            ->addColumn('product_id', 'integer')
+            ->addColumn('product_id', 'integer', ['signed' => false])
             ->addColumn('type_id', 'integer', ['signed' => false])
             ->addColumn('title', 'string')
             ->addColumn('description', 'string')
@@ -77,13 +67,71 @@ final class ProductsMigration extends AbstractMigration
             ->addForeignKey('company_id', 'company', 'id')
             ->create();
 
-        $this->table('product_image', ['id' => false, 'primary_key' => ['version_id', 'image_id']])
-            ->addColumn('version_id', 'integer', ['null' => false, 'signed' => false])
-            ->addColumn('image_id', 'integer', ['null' => false, 'signed' => false])
-            ->addColumn('main_image', 'boolean')
-            ->addColumn('deleted', 'boolean')
-            ->addForeignKey('version_id', 'product_version', 'id')
-            ->addForeignKey('image_id', 'stored_file', 'id')
+        $this->table('product')
+            ->addColumn('date_created', 'datetime')
+            ->addColumn('date_updated', 'datetime')
+            ->addColumn('draft_id', 'integer', ['signed' => false, 'null' => true])
+            ->addColumn('published_draft_id', 'integer', ['signed' => false, 'null' => true])
+            ->addColumn('code', 'string')
+            ->addColumn('slug', 'string')
+            ->addIndex('code', ['unique' => true])
+            ->addIndex('slug', ['unique' => true])
+            ->create();
+
+        // Now add the circular foreign keys
+        $this->table('product')
+            ->addForeignKey('draft_id', 'product_version', 'id')
+            ->addForeignKey('published_draft_id', 'product_version', 'id')
+            ->update();
+
+        $this->table('product_version')
+            ->addForeignKey('product_id', 'product', 'id')
+            ->update();
+
+        $this->createDependentTables();
+    }
+
+    public function down(): void
+    {
+        // Drop dependent tables first
+        $this->dropDependentTables();
+
+        // Remove circular foreign keys in correct order
+        $this->table('product_version')
+            ->dropForeignKey('product_id')
+            ->dropForeignKey('brand_id')
+            ->dropForeignKey('status_id')
+            ->dropForeignKey('condition_id')
+            ->dropForeignKey('type_id')
+            ->dropForeignKey('company_id')
+            ->dropForeignKey('vat_rate_id')
+            ->update();
+
+        $this->table('product')
+            ->dropForeignKey('draft_id')
+            ->dropForeignKey('published_draft_id')
+            ->update();
+
+        // Now we can drop the main tables
+        $this->table('product')->drop()->update();
+        $this->table('product_version')->drop()->update();
+
+        // Drop all other tables
+        $this->dropBaseTables();
+    }
+
+    private function createBaseTables(): void
+    {
+        $this->table('product_condition')
+            ->addColumn('name', 'string')
+            ->create();
+
+        $this->table('product_type')
+            ->addColumn('name', 'string')
+            ->create();
+
+        $this->table('product_brand')
+            ->addColumn('name', 'string')
             ->create();
 
         $this->table('category_status')
@@ -106,6 +154,22 @@ final class ProductsMigration extends AbstractMigration
             ->addForeignKey('status_id', 'category_status', 'id')
             ->create();
 
+        $this->table('flag')
+            ->addColumn('name', 'string')
+            ->create();
+    }
+
+    private function createDependentTables(): void
+    {
+        $this->table('product_image', ['id' => false, 'primary_key' => ['version_id', 'image_id']])
+            ->addColumn('version_id', 'integer', ['null' => false, 'signed' => false])
+            ->addColumn('image_id', 'integer', ['null' => false, 'signed' => false])
+            ->addColumn('main_image', 'boolean')
+            ->addColumn('deleted', 'boolean')
+            ->addForeignKey('version_id', 'product_version', 'id')
+            ->addForeignKey('image_id', 'stored_file', 'id')
+            ->create();
+
         $this->table('product_category')
             ->addColumn('version_id', 'integer', ['signed' => false])
             ->addColumn('category_id', 'integer', ['signed' => false])
@@ -115,33 +179,12 @@ final class ProductsMigration extends AbstractMigration
             ->addForeignKey('category_id', 'category', 'id')
             ->create();
 
-        $this->table('flag')
-            ->addColumn('name', 'string')
-            ->create();
-
-        $this->table('product_flag', ['id' => false, 'primary_key' => ['product_id', 'flag_id']])
+        $this->table('product_flag', ['id' => false, 'primary_key' => ['version_id', 'flag_id']])
             ->addColumn('version_id', 'integer', ['signed' => false, 'null' => false])
             ->addColumn('flag_id', 'integer', ['signed' => false, 'null' => false])
             ->addForeignKey('flag_id', 'flag', 'id')
             ->addForeignKey('version_id', 'product_version', 'id')
             ->create();
-
-        $this->table('product')
-            ->addColumn('date_created', 'datetime')
-            ->addColumn('date_updated', 'datetime')
-            ->addColumn('draft_id', 'integer', ['signed' => false])
-            ->addColumn('code', 'string')
-            ->addColumn('slug', 'string')
-            ->addColumn('published_draft_id', 'integer', ['signed' => false])
-            ->addIndex('code', ['unique' => true])
-            ->addIndex('slug', ['unique' => true])
-            ->addForeignKey('draft_id', 'product_draft', 'id')
-            ->addForeignKey('published_draft_id', 'product_draft', 'id')
-            ->update();
-
-        $this->table('product_version')
-            ->addForeignKey('product_id', 'product', 'id')
-            ->update();
 
         $this->table('product_related', ['id' => false, 'primary_key' => ['source_product', 'target_product']])
             ->addColumn('source_product', 'integer', ['null' => false, 'signed' => false])
@@ -156,5 +199,26 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('user_id', 'integer', ['signed' => false])
             ->addColumn('entry', 'text')
             ->create();
+    }
+
+    private function dropDependentTables(): void
+    {
+        $this->table('product_version_history')->drop()->update();
+        $this->table('product_related')->drop()->update();
+        $this->table('product_flag')->drop()->update();
+        $this->table('product_category')->drop()->update();
+        $this->table('product_image')->drop()->update();
+    }
+
+    private function dropBaseTables(): void
+    {
+        $this->table('flag')->drop()->update();
+        $this->table('category')->drop()->update();
+        $this->table('category_status')->drop()->update();
+        $this->table('product_brand')->drop()->update();
+        $this->table('product_type')->drop()->update();
+        $this->table('product_condition')->drop()->update();
+        $this->table('product_status')->drop()->update();
+        $this->table('product_vat_rate')->drop()->update();
     }
 }
