@@ -150,6 +150,7 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('title', 'string')
             ->addColumn('slug', 'string')
             ->addColumn('description', 'text')
+            ->addColumn('parent_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('meta_description', 'text', ['null' => true])
             ->addColumn('meta_title', 'text', ['null' => true])
             ->addColumn('meta_keywords', 'text', ['null' => true])
@@ -159,6 +160,7 @@ final class ProductsMigration extends AbstractMigration
             ->addIndex('slug', ['unique' => true])
             ->addForeignKey('image_id', 'stored_file', 'id')
             ->addForeignKey('status_id', 'category_status', 'id')
+            ->addForeignKey('parent_id', 'category', 'id')
             ->create();
 
         $this->table('flag')
