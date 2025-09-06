@@ -10,6 +10,8 @@ use Pantono\Storage\FileStorage;
 use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\NoSave;
+use Pantono\Images\Images;
+use Pantono\Images\Model\Image;
 
 #[Locator(methodName: 'getCategoryById', className: Categories::class)]
 class Category
@@ -25,8 +27,8 @@ class Category
     private ?string $metaTitle = null;
     private ?string $metaKeywords = null;
     private ?string $metaRobots = null;
-    #[FieldName('image_id'), Locator(methodName: 'getImageById', className: FileStorage::class)]
-    private ?StoredFile $image = null;
+    #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
+    private ?Image $image = null;
     #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Categories::class)]
     private ?CategoryStatus $status;
     #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
@@ -123,12 +125,12 @@ class Category
         $this->metaRobots = $metaRobots;
     }
 
-    public function getImage(): ?StoredFile
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage(?StoredFile $image): void
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
