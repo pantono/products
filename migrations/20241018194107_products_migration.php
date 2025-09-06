@@ -157,6 +157,7 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('meta_robots', 'text', ['null' => true])
             ->addColumn('image_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('status_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('display_order', 'integer', ['default' => 0])
             ->addIndex('slug', ['unique' => true])
             ->addForeignKey('image_id', 'stored_file', 'id')
             ->addForeignKey('status_id', 'category_status', 'id')

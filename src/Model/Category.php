@@ -31,6 +31,7 @@ class Category
     private ?CategoryStatus $status;
     #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
     private ?Category $parent = null;
+    private int $displayOrder = 0;
 
     public function getId(): ?int
     {
@@ -150,5 +151,15 @@ class Category
     public function setParent(?Category $parent): void
     {
         $this->parent = $parent;
+    }
+
+    public function getDisplayOrder(): int
+    {
+        return $this->displayOrder;
+    }
+
+    public function setDisplayOrder(int $displayOrder): void
+    {
+        $this->displayOrder = $displayOrder;
     }
 }
