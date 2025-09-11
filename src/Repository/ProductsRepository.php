@@ -123,8 +123,8 @@ class ProductsRepository extends MysqlRepository
     public function getRelatedProducts(ProductVersion $product): array
     {
         $select = $this->getDb()->select()->from('product_related', [])
-            ->joinInner('product', 'product_related.target_product=product.id')
-            ->joinInner('product_status', 'product.status_id=product_status.id', [])
+            ->joinInner('product_version', 'product_related.target_product=product_version.id')
+            ->joinInner('product_status', 'product_version.status_id=product_status.id', [])
             ->where('product_status.archived=?', 0)
             ->where('product_status.visible=?', 1)
             ->where('product_related.source_product=?', $product->getId());
