@@ -61,7 +61,7 @@ class ProductVersion
     /**
      * @var Flag[]
      */
-    #[Locator(methodName: 'getFlagsForProduct', className: ProductVersion::class), FieldName('$this')]
+    #[Locator(methodName: 'getFlagsForProduct', className: Products::class), FieldName('$this')]
     private array $flags;
 
     public function getId(): ?int
