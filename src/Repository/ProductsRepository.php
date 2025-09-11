@@ -54,9 +54,9 @@ class ProductsRepository extends MysqlRepository
         return $this->selectSingleRow('product', 'id', $id);
     }
 
-    public function getCategoriesForProduct(ProductVersion $product): array
+    public function getCategoriesForProduct(ProductVersion $version): array
     {
-        return $this->selectRowsByValues('product_category', ['product_id' => $product->getId()], 'display_order');
+        return $this->selectRowsByValues('product_category', ['version_id' => $version->getId()], 'display_order');
     }
 
     public function saveProductVersion(ProductVersion $product): void
@@ -77,11 +77,11 @@ class ProductsRepository extends MysqlRepository
         }
     }
 
-    private function saveCategoriesForProduct(ProductVersion $product): void
+    private function saveCategoriesForProduct(ProductVersion $version): void
     {
         $doneIds = [];
-        foreach ($product->getCategories() as $category) {
-            $id = $this->insertOrUpdateCheck('product_image', 'id', $category->getId(), $category->getAllData());
+        foreach ($version->getCategories() as $category) {
+            $id = $this->insertOrUpdateCheck('product_category', 'id', $category->getId(), $category->getAllData());
             if ($id) {
                 $category->setId($id);
             }
@@ -89,7 +89,7 @@ class ProductsRepository extends MysqlRepository
         }
 
         $params = [
-            'product_id=?' => $product->getId()
+            'version_id=?' => $version->getId()
         ];
         if (!empty($doneIds)) {
             $params['id NOT IN (?)'] = $doneIds;
@@ -111,7 +111,7 @@ class ProductsRepository extends MysqlRepository
             $doneIds[] = $image->getId();
         }
         $params = [
-            'product_id=?' => $product->getId()
+            'version_id=?' => $product->getId()
         ];
         if (!empty($doneIds)) {
             $params['id NOT IN (?)'] = $doneIds;
