@@ -81,6 +81,7 @@ class ProductsRepository extends MysqlRepository
     {
         $doneIds = [];
         foreach ($version->getCategories() as $category) {
+            $category->setVersionId($version->getId());
             $id = $this->insertOrUpdateCheck('product_category', 'id', $category->getId(), $category->getAllData());
             if ($id) {
                 $category->setId($id);

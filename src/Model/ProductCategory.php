@@ -15,7 +15,7 @@ class ProductCategory
     private ?int $id = null;
     #[FieldName('category_id'), Locator(methodName: 'getCategoryById', className: Products::class)]
     private Category $category;
-    private int $productId;
+    private int $versionId;
     private int $displayOrder;
     private bool $archived;
 
@@ -39,14 +39,14 @@ class ProductCategory
         $this->category = $category;
     }
 
-    public function getProductId(): int
+    public function getVersionId(): int
     {
-        return $this->productId;
+        return $this->versionId;
     }
 
-    public function setProductId(int $productId): void
+    public function setVersionId(int $versionId): void
     {
-        $this->productId = $productId;
+        $this->versionId = $versionId;
     }
 
     public function getDisplayOrder(): int
