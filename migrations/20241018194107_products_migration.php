@@ -56,6 +56,7 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('status_id', 'integer', ['signed' => false])
             ->addColumn('vat_rate_id', 'integer', ['signed' => false])
             ->addColumn('weight', 'float')
+            ->addColumn('items_included', 'integer')
             ->addColumn('stock_holding', 'integer')
             ->addColumn('meta_description', 'text', ['null' => true])
             ->addColumn('meta_title', 'text', ['null' => true])

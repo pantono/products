@@ -29,6 +29,7 @@ class ProductVersion
     #[FieldName('vat_rate_id'), Locator(methodName: 'getVatRateById', className: Products::class)]
     private ProductVatRate $vatRate;
     private float $weight;
+    private int $itemsIncluded = 1;
     private int $stockHolding;
     private ?string $metaDescription;
     private ?string $metaTitle;
@@ -176,6 +177,16 @@ class ProductVersion
     public function setWeight(float $weight): void
     {
         $this->weight = $weight;
+    }
+
+    public function getItemsIncluded(): int
+    {
+        return $this->itemsIncluded;
+    }
+
+    public function setItemsIncluded(int $itemsIncluded): void
+    {
+        $this->itemsIncluded = $itemsIncluded;
     }
 
     public function getStockHolding(): int
