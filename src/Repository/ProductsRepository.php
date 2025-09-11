@@ -159,11 +159,11 @@ class ProductsRepository extends MysqlRepository
         return $this->getDb()->fetchAll($select);
     }
 
-    public function getFlagsForProduct(ProductVersion $product): array
+    public function getFlagsForProduct(ProductVersion $version): array
     {
         $select = $this->getDb()->select()->from('product_flag', [])
             ->joinInner('flag', 'flag.id=product_flag.flag_id')
-            ->where('product_flag.product_id=?', $product->getId());
+            ->where('product_flag.version_id=?', $version->getId());
 
         return $this->getDb()->fetchAll($select);
     }
