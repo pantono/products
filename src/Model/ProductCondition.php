@@ -10,6 +10,7 @@ class ProductCondition
 {
     private ?int $id = null;
     private string $name;
+    private string $externalName;
 
     public function getId(): ?int
     {
@@ -29,5 +30,15 @@ class ProductCondition
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getExternalName(): string
+    {
+        return $this->externalName;
+    }
+
+    public function setExternalName(string $externalName): void
+    {
+        $this->externalName = $externalName;
     }
 }

@@ -131,6 +131,7 @@ final class ProductsMigration extends AbstractMigration
     {
         $this->table('product_condition')
             ->addColumn('name', 'string')
+            ->addColumn('external_name', 'string')
             ->create();
 
         $this->table('product_type')
