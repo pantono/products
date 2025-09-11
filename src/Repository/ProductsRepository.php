@@ -6,6 +6,7 @@ use Pantono\Database\Repository\MysqlRepository;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Filter\ProductFilter;
 use Pantono\Products\Model\Product;
+use Pantono\Products\Model\ProductBrand;
 
 class ProductsRepository extends MysqlRepository
 {
@@ -199,5 +200,13 @@ class ProductsRepository extends MysqlRepository
     public function getAllVatRates(): array
     {
         return $this->selectAll('product_vat_rate', 'rate ASC');
+    }
+
+    public function saveBrand(ProductBrand $brand): void
+    {
+        $id = $this->insertOrUpdateCheck('product_brand', 'id', $brand->getId(), ['id' => $brand->getId(), 'name' => $brand->getName()]);
+        if ($id) {
+            $brand->setId($id);
+        }
     }
 }

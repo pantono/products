@@ -22,6 +22,8 @@ use Pantono\Products\Event\PreProductSaveEvent;
 use Pantono\Products\Event\PostProductSaveEvent;
 use Pantono\Products\Model\ProductBrand;
 use Pantono\Products\Model\ProductCondition;
+use Pantono\Products\Event\PreBrandSaveEvent;
+use Pantono\Products\Event\PostBrandSaveEvent;
 
 class Products
 {
@@ -189,6 +191,22 @@ class Products
 
         $event = new PostProductSaveEvent();
         $event->setCurrent($product);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+    }
+
+    public function saveBrand(ProductBrand $brand): void
+    {
+        $previous = $brand->getId() ? $this->getBrandById($brand->getId()) : null;
+        $event = new PreBrandSaveEvent();
+        $event->setCurrent($brand);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+
+        $this->repository->saveBrand($brand);
+
+        $event = new PostBrandSaveEvent();
+        $event->setCurrent($brand);
         $event->setPrevious($previous);
         $this->dispatcher->dispatch($event);
     }
