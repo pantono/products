@@ -21,8 +21,6 @@ class ProductVersion
     private \DateTimeImmutable $dateUpdated;
     private ProductType $type;
     private string $title;
-    private string $code;
-    private string $slug;
     private string $description;
     #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Products::class)]
     private ProductStatus $status;
@@ -37,7 +35,8 @@ class ProductVersion
     private ?string $metaRobots;
     #[Locator(methodName: 'getBrandById', className: Products::class), FieldName('brand_id')]
     private ?ProductBrand $brand = null;
-    private ?int $conditionId;
+    #[Locator(methodName: 'getConditionById', className: Products::class), FieldName('condition_id')]
+    private ?ProductCondition $condition = null;
     private float $price;
     private float $rrp;
     private ?Company $company = null;
@@ -117,26 +116,6 @@ class ProductVersion
     public function setTitle(string $title): void
     {
         $this->title = $title;
-    }
-
-    public function getCode(): string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): void
-    {
-        $this->code = $code;
-    }
-
-    public function getSlug(): string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): void
-    {
-        $this->slug = $slug;
     }
 
     public function getDescription(): string
@@ -249,14 +228,14 @@ class ProductVersion
         $this->brand = $brand;
     }
 
-    public function getConditionId(): ?int
+    public function getCondition(): ?ProductCondition
     {
-        return $this->conditionId;
+        return $this->condition;
     }
 
-    public function setConditionId(?int $conditionId): void
+    public function setCondition(?ProductCondition $condition): void
     {
-        $this->conditionId = $conditionId;
+        $this->condition = $condition;
     }
 
     public function getPrice(): float
