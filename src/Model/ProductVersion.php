@@ -19,6 +19,7 @@ class ProductVersion
     private int $productId;
     private \DateTimeImmutable $dateAdded;
     private \DateTimeImmutable $dateUpdated;
+    #[FieldName('type_id'), Locator(methodName: 'getTypeById', className: Products::class)]
     private ProductType $type;
     private string $title;
     private string $description;
