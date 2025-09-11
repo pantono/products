@@ -5,10 +5,13 @@ namespace Pantono\Products\Model;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
+use Pantono\Database\Traits\SavableModel;
 
 #[Locator(methodName: 'getProductCategoryById', className: Products::class)]
 class ProductCategory
 {
+    use SavableModel;
+
     private ?int $id = null;
     #[FieldName('category_id'), Locator(methodName: 'getCategoryById', className: Products::class)]
     private Category $category;
