@@ -48,6 +48,9 @@ class ProductVersion
      */
     #[Locator(methodName: 'getImagesForProduct', className: Products::class), FieldName('$this')]
     private array $images = [];
+    /**
+     * @var ProductCategory[]
+     */
     #[Locator(methodName: 'getCategoriesForProduct', className: Products::class), FieldName('$this')]
     private array $categories = [];
     /**
@@ -281,6 +284,11 @@ class ProductVersion
         $this->images = $images;
     }
 
+    public function addImage(ProductImage $image): void
+    {
+        $this->images[] = $image;
+    }
+
     public function getCategories(): array
     {
         return $this->categories;
@@ -289,6 +297,11 @@ class ProductVersion
     public function setCategories(array $categories): void
     {
         $this->categories = $categories;
+    }
+
+    public function addCategory(ProductCategory $category): void
+    {
+        $this->categories[] = $category;
     }
 
     public function getRelated(): array
