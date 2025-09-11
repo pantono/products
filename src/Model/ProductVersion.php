@@ -9,6 +9,7 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Customers\Model\Company;
 use Pantono\Core\Application\Traits\DiffableTrait;
 use Pantono\Hydrator\Traits\FillableTrait;
+use Pantono\Customers\Companies;
 
 #[Locator(methodName: 'getProductById', className: Products::class)]
 class ProductVersion
@@ -40,6 +41,7 @@ class ProductVersion
     private ?ProductCondition $condition = null;
     private float $price;
     private float $rrp;
+    #[FieldName('company_id'), Locator(methodName: 'getCompanyById', className: Companies::class)]
     private ?Company $company = null;
     /**
      * @var ProductImage[]
