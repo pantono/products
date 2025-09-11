@@ -29,7 +29,7 @@ class ProductsRepository extends MysqlRepository
     {
         $select = $this->getDb()->select()->from('product_image')
             ->where('deleted=?', 0)
-            ->where('product_id=?', $product->getId());
+            ->where('version_id=?', $product->getId());
 
         return $this->getDb()->fetchAll($select);
     }
@@ -145,7 +145,7 @@ class ProductsRepository extends MysqlRepository
                 ->orWhere('product.description like ?)', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getCategory() !== null) {
-            $select->joinInner('product_category', 'product_category.product_id=product.id', [])
+            $select->joinInner('product_category', 'product_category.version_id=product.published_version_id', [])
                 ->where('product_category.category_id=?', $filter->getCategory()->getId());
         }
         if ($filter->getStatus() !== null) {
