@@ -52,7 +52,7 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('product_id', 'integer', ['signed' => false])
             ->addColumn('type_id', 'integer', ['signed' => false])
             ->addColumn('title', 'string')
-            ->addColumn('description', 'string')
+            ->addColumn('description', 'text')
             ->addColumn('status_id', 'integer', ['signed' => false])
             ->addColumn('vat_rate_id', 'integer', ['signed' => false])
             ->addColumn('weight', 'float')
