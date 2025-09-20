@@ -31,10 +31,10 @@ class ProductVersion
     private float $weight;
     private int $itemsIncluded = 1;
     private int $stockHolding;
-    private ?string $metaDescription;
-    private ?string $metaTitle;
-    private ?string $metaKeywords;
-    private ?string $metaRobots;
+    private ?string $metaDescription = null;
+    private ?string $metaTitle = null;
+    private ?string $metaKeywords = null;
+    private ?string $metaRobots = null;
     #[Locator(methodName: 'getBrandById', className: Products::class), FieldName('brand_id')]
     private ?ProductBrand $brand = null;
     #[Locator(methodName: 'getConditionById', className: Products::class), FieldName('condition_id')]
