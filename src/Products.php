@@ -153,12 +153,9 @@ class Products
         return $this->hydrator->hydrateSet(ProductCondition::class, $this->repository->getAllConditions());
     }
 
-    /**
-     * @return ProductVersion[]
-     */
     public function getProductsByFilter(ProductFilter $filter): array
     {
-        return $this->hydrator->hydrateSet(ProductVersion::class, $this->repository->getProductsByFilter($filter));
+        return $this->hydrator->hydrateSet(Product::class, $this->repository->getProductsByFilter($filter));
     }
 
     public function saveProductVersion(ProductVersion $product): void
