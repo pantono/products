@@ -103,14 +103,14 @@ class Products
         return $this->hydrator->hydrateSet(ProductVersion::class, $this->repository->getRelatedProducts($product));
     }
 
-    public function getProductBySlug(string $slug): ?ProductVersion
+    public function getProductBySlug(string $slug): ?Product
     {
-        return $this->hydrator->hydrate(ProductVersion::class, $this->repository->getProductBySlug($slug));
+        return $this->hydrator->hydrate(Product::class, $this->repository->getProductBySlug($slug));
     }
 
-    public function getFlagsForProduct(ProductVersion $product): array
+    public function getFlagsForProductVersion(ProductVersion $product): array
     {
-        return $this->hydrator->hydrateSet(Flag::class, $this->repository->getFlagsForProduct($product));
+        return $this->hydrator->hydrateSet(Flag::class, $this->repository->getFlagsForProductVersion($product));
     }
 
     public function getFlagById(int $id): ?Flag
