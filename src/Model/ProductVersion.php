@@ -10,6 +10,8 @@ use Pantono\Customers\Model\Company;
 use Pantono\Core\Application\Traits\DiffableTrait;
 use Pantono\Hydrator\Traits\FillableTrait;
 use Pantono\Customers\Companies;
+use Pantono\Products\Discounts;
+use Pantono\Contracts\Attributes\NoSave;
 
 #[Locator(methodName: 'getProductById', className: Products::class)]
 class ProductVersion
@@ -63,6 +65,13 @@ class ProductVersion
      */
     #[Locator(methodName: 'getFlagsForProductVersion', className: Products::class), FieldName('$this')]
     private array $flags;
+    /**
+     * @var SpecialOffer[]
+     */
+    #[Locator(methodName: 'getOffersForProductVersion', className: Discounts::class), FieldName('$this')]
+    private array $offers;
+    #[NoSave]
+    private ?ProductPrice $priceBreakdown = null;
 
     public function getId(): ?int
     {
@@ -322,5 +331,38 @@ class ProductVersion
     public function setFlags(array $flags): void
     {
         $this->flags = $flags;
+    }
+
+    public function getOffers(): array
+    {
+        return $this->offers;
+    }
+
+    public function setOffers(array $offers): void
+    {
+        $this->offers = $offers;
+    }
+
+    /**
+     * @return SpecialOffer[]
+     */
+    public function getActiveOffers(): array
+    {
+        return array_filter($this->offers, function (SpecialOffer $offer) {
+            return $offer->isActive();
+        });
+    }
+
+    public function getPriceBreakdown(): ProductPrice
+    {
+        if (!$this->priceBreakdown) {
+            $this->priceBreakdown = new ProductPrice($this);
+        }
+        return $this->priceBreakdown;
+    }
+
+    public function isOnOffer(): bool
+    {
+        return !empty($this->getActiveOffers());
     }
 }

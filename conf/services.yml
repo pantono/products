@@ -6,3 +6,5 @@ ProductApproval:
   class: Pantono\Products\ProductApproval
 ProductHistory:
   class: Pantono\Products\ProductHistory
+Discounts:
+  class: Pantono\Products\ProductHistory
