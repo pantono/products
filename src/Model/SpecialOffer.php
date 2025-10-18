@@ -3,12 +3,16 @@
 namespace Pantono\Products\Model;
 
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\FieldName;
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Products\Discounts;
 
 class SpecialOffer
 {
     use SavableModel;
 
     private ?int $id = null;
+    #[FieldName('discount_id'), Locator(methodName: 'getDiscountById', className: Discounts::class)]
     private ?Discount $discount = null;
     private \DateTimeInterface $startDate;
     private \DateTimeInterface $endDate;
