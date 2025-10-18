@@ -15,6 +15,7 @@ class Discount
     private ?int $id = null;
     #[Field('base_id')]
     private DiscountBase $base;
+    private string $name;
     private ?float $amount = null;
     private ?float $minSpend = null;
     private ?float $maxSpend = null;
@@ -47,6 +48,16 @@ class Discount
     public function setBase(DiscountBase $base): void
     {
         $this->base = $base;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getAmount(): ?float
