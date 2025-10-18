@@ -140,11 +140,11 @@ class ProductsRepository extends MysqlRepository
     public function getProductsByFilter(ProductFilter $filter): array
     {
         $select = $this->getDb()->select()->from('product')
-            ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=product_version.id', []);
+            ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=published.id', []);
 
         if ($filter->getSearch() !== null) {
             $select->where('(published.name like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('published].description like ?)', '%' . $filter->getSearch() . '%');
+                ->orWhere('published.description like ?)', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getCategory() !== null) {
             $select->joinInner('product_category', 'product_category.version_id=product.published_draft_id', [])
