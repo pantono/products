@@ -42,6 +42,28 @@ class DiscountsRepository extends MysqlRepository
         if ($id) {
             $discount->setId($id);
         }
+
+        $params = [
+            'discount_id=?' => $discount->getId()
+        ];
+        $ids = [];
+        foreach ($discount->getRules() as $rule) {
+            $id = $this->insertOrUpdate('discount_rule', 'id', $rule->getId(), [
+                'discount_id' => $discount->getId(),
+                'field' => $rule->getField(),
+                'value' => $rule->getValue(),
+                'operand' => $rule->getOperand(),
+                'include' => $rule->isInclude()
+            ]);
+            if ($id) {
+                $rule->setId($id);
+            }
+            $ids[] = $rule->getId();
+        }
+        if (count($ids) > 0) {
+            $params['id NOT IN (?)'] = $ids;
+        }
+        $this->getDb()->delete('discount_rule', $params);
     }
 
     public function saveDiscountCode(DiscountCode $code): void
