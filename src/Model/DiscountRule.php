@@ -56,6 +56,12 @@ class DiscountRule
         return $this->operand;
     }
 
+    public function getReverseOperand(): string
+    {
+        $map = ['=' => '<>', '<' => '>', '>' => '<', '<=' => '>=', '>=' => '<=', '!=' => '=', 'in' => 'not in', 'not in' => 'in', 'like' => 'not like', 'not like' => 'like'];
+        return $map[$this->operand];
+    }
+
     public function setOperand(string $operand): void
     {
         $allowed = ['=', '<', '>', '<=', '>=', '!=', 'in', 'not in', 'like', 'not like'];
