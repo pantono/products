@@ -58,7 +58,7 @@ class DiscountRule
 
     public function setOperand(string $operand): void
     {
-        $allowed = ['=', '<', '>', '<=', '>=', '!=', 'in', 'not in'];
+        $allowed = ['=', '<', '>', '<=', '>=', '!=', 'in', 'not in', 'like', 'not like'];
         if (!in_array($operand, $allowed)) {
             throw new \RuntimeException('Invalid operand for discount rule');
         }
