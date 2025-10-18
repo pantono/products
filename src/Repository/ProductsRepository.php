@@ -139,17 +139,19 @@ class ProductsRepository extends MysqlRepository
 
     public function getProductsByFilter(ProductFilter $filter): array
     {
-        $select = $this->getDb()->select()->from('product');
+        $select = $this->getDb()->select()->from('product')
+            ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=product_version.id', []);
+
         if ($filter->getSearch() !== null) {
-            $select->where('(product.name like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('product.description like ?)', '%' . $filter->getSearch() . '%');
+            $select->where('(published.name like ?', '%' . $filter->getSearch() . '%')
+                ->orWhere('published].description like ?)', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getCategory() !== null) {
             $select->joinInner('product_category', 'product_category.version_id=product.published_draft_id', [])
                 ->where('product_category.category_id=?', $filter->getCategory()->getId());
         }
         if ($filter->getStatus() !== null) {
-            $select->where('product.status_id=?', $filter->getStatus()->getId());
+            $select->where('published.status_id=?', $filter->getStatus()->getId());
         }
         foreach ($filter->getColumns() as $column) {
             $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);
