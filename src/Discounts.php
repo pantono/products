@@ -16,18 +16,24 @@ use Pantono\Products\Event\PostDiscountCodeSaveEvent;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Filter\SpecialOfferFilter;
 use Pantono\Products\Model\SpecialOffer;
+use Pantono\Products\Filter\ProductFilter;
+use Pantono\Products\Model\ProductStatus;
+use Pantono\Products\Event\PreSpecialOfferSaveEvent;
+use Pantono\Products\Event\PostSpecialOfferSaveEvent;
 
 class Discounts
 {
     private DiscountsRepository $repository;
     private Hydrator $hydrator;
     private EventDispatcher $dispatcher;
+    private Products $products;
 
-    public function __construct(DiscountsRepository $repository, Hydrator $hydrator, EventDispatcher $dispatcher)
+    public function __construct(DiscountsRepository $repository, Hydrator $hydrator, EventDispatcher $dispatcher, Products $products)
     {
         $this->repository = $repository;
         $this->hydrator = $hydrator;
         $this->dispatcher = $dispatcher;
+        $this->products = $products;
     }
 
     public function getOffersForProductVersion(ProductVersion $version): array
@@ -37,7 +43,12 @@ class Discounts
 
     public function getOffersByFilter(SpecialOfferFilter $filter): array
     {
-        return $this->hydrator->hydrate(SpecialOffer::class, $this->repository->getOffersByFilter($filter));
+        return $this->hydrator->hydrateSet(SpecialOffer::class, $this->repository->getOffersByFilter($filter));
+    }
+
+    public function getSpecialOfferById(int $id): ?SpecialOffer
+    {
+        return $this->hydrator->hydrate(SpecialOffer::class, $this->repository->getSpecialOfferById($id));
     }
 
     public function getDiscountBaseById(int $id): ?DiscountBase
@@ -97,6 +108,22 @@ class Discounts
         $this->dispatcher->dispatch($event);
     }
 
+    public function saveSpecialOffer(SpecialOffer $offer): void
+    {
+        $previous = $offer->getId() ? $this->getSpecialOfferById($offer->getId()) : null;
+        $event = new PreSpecialOfferSaveEvent();
+        $event->setPrevious($previous);
+        $event->setCurrent($offer);
+        $this->dispatcher->dispatch($event);
+
+        $this->repository->saveSpecialOffer($offer);
+
+        $event = new PostSpecialOfferSaveEvent();
+        $event->setPrevious($previous);
+        $event->setCurrent($offer);
+        $this->dispatcher->dispatch($event);
+    }
+
     public function logDiscountCodeUsage(Discount $discount, int $orderId): void
     {
         $this->repository->logDiscountCodeUsed($discount, $orderId);
@@ -105,5 +132,22 @@ class Discounts
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
     {
         $this->repository->addProductToOffer($version, $offer);
+    }
+
+    public function updateAllOfferProducts(SpecialOffer $offer): int
+    {
+        $this->repository->clearProductsForOffer($offer);
+        $filter = new ProductFilter();
+        $filter->setStatus($this->hydrator->lookupRecord(ProductStatus::class, ProductApproval::STATUS_APPROVED));
+        $rules = $offer->getDiscount() ? $offer->getDiscount()->getRules() : [];
+        foreach ($rules as $rule) {
+            $filter->addColumn($rule->getField(), $rule->getValue(), $rule->getOperand());
+        }
+        $total = 0;
+        foreach ($this->products->getProductsByFilter($filter) as $product) {
+            $this->addProductToOffer($product->getPublishedDraft(), $offer);
+            $total++;
+        }
+        return $total;
     }
 }

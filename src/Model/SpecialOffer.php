@@ -2,8 +2,12 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Database\Traits\SavableModel;
+
 class SpecialOffer
 {
+    use SavableModel;
+
     private ?int $id = null;
     private ?Discount $discount = null;
     private \DateTimeInterface $startDate;

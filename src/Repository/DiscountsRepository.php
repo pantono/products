@@ -61,6 +61,11 @@ class DiscountsRepository extends MysqlRepository
         ]);
     }
 
+    public function getSpecialOfferById(int $id): ?array
+    {
+        return $this->selectSingleRow('special_offer', 'id', $id);
+    }
+
     public function getOffersByFilter(SpecialOfferFilter $filter): array
     {
         $select = $this->getDb()->select()->from('special_offer');
@@ -95,11 +100,24 @@ class DiscountsRepository extends MysqlRepository
         return $this->getDb()->fetchAll($select);
     }
 
+    public function clearProductsForOffer(SpecialOffer $offer): void
+    {
+        $this->getDb()->delete('special_offer_product', ['special_offer_id' => $offer->getId()]);
+    }
+
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
     {
         $this->insertIgnore('special_offer_product', [
             'product_version_id' => $version->getId(),
             'special_offer_id' => $offer->getId()
         ]);
+    }
+
+    public function saveSpecialOffer(SpecialOffer $offer): void
+    {
+        $id = $this->insertOrUpdate('special_offer', 'id', $offer->getId(), $offer->getAllData());
+        if ($id) {
+            $offer->setId($id);
+        }
     }
 }
