@@ -13,7 +13,7 @@ class Discount
     use SavableModel;
 
     private ?int $id = null;
-    #[Field('base_id')]
+    #[FieldName('base_id')]
     private DiscountBase $base;
     private string $name;
     private ?float $amount = null;
