@@ -69,7 +69,7 @@ final class SpecialOffersMigration extends AbstractMigration
 
         $this->table('special_offer')
             ->addColumn('name', 'string')
-            ->addColumn('discount_id', 'integer')
+            ->addColumn('discount_id', 'integer', ['signed' => false])
             ->addColumn('start_date', 'datetime')
             ->addColumn('end_date', 'datetime')
             ->addColumn('active', 'boolean')
