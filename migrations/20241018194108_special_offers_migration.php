@@ -38,7 +38,7 @@ final class SpecialOffersMigration extends AbstractMigration
             ->addColumn('stack', 'boolean')
             ->addColumn('live', 'boolean')
             ->addColumn('deleted', 'boolean')
-            ->addForeignKey('base_id', 'discount_type', 'id')
+            ->addForeignKey('base_id', 'discount_base', 'id')
             ->create();
 
         $this->table('discount_rule')
