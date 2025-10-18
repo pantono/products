@@ -5,7 +5,7 @@ namespace Pantono\Products\Model;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 
-#[Locator(methodName: 'getProductStatusById', className: Products::class)]
+#[Locator(methodName: 'getStatusById', className: Products::class)]
 class ProductStatus
 {
     private ?int $id = null;
