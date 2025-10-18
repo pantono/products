@@ -14,6 +14,7 @@ class SpecialOffer
     private ?int $id = null;
     #[FieldName('discount_id'), Locator(methodName: 'getDiscountById', className: Discounts::class)]
     private ?Discount $discount = null;
+    private ?string $name = null;
     private \DateTimeInterface $startDate;
     private \DateTimeInterface $endDate;
     private bool $active;
@@ -36,6 +37,16 @@ class SpecialOffer
     public function setDiscount(?Discount $discount): void
     {
         $this->discount = $discount;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getStartDate(): \DateTimeInterface
