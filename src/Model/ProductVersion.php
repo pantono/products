@@ -12,6 +12,7 @@ use Pantono\Hydrator\Traits\FillableTrait;
 use Pantono\Customers\Companies;
 use Pantono\Products\Discounts;
 use Pantono\Contracts\Attributes\NoSave;
+use Pantono\Contracts\Attributes\Lazy;
 
 #[Locator(methodName: 'getProductById', className: Products::class)]
 class ProductVersion
@@ -64,12 +65,12 @@ class ProductVersion
      * @var Flag[]
      */
     #[Locator(methodName: 'getFlagsForProductVersion', className: Products::class), FieldName('$this')]
-    private array $flags;
+    private array $flags = [];
     /**
      * @var SpecialOffer[]
      */
-    #[Locator(methodName: 'getOffersForProductVersion', className: Discounts::class), FieldName('$this')]
-    private array $offers;
+    #[Locator(methodName: 'getOffersForProductVersion', className: Discounts::class), FieldName('$this'), Lazy]
+    private array $offers = [];
     #[NoSave]
     private ?ProductPrice $priceBreakdown = null;
 
