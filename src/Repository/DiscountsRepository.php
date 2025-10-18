@@ -124,7 +124,7 @@ class DiscountsRepository extends MysqlRepository
 
     public function clearProductsForOffer(SpecialOffer $offer): void
     {
-        $this->getDb()->delete('special_offer_product', ['special_offer_id' => $offer->getId()]);
+        $this->getDb()->delete('special_offer_product', ['special_offer_id=?' => $offer->getId()]);
     }
 
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
