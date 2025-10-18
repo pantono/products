@@ -6,7 +6,7 @@ use Phinx\Migration\AbstractMigration;
 
 final class SpecialOffersMigration extends AbstractMigration
 {
-    public function up(): void
+    public function change(): void
     {
         $this->table('discount_base')
             ->addColumn('name', 'string')
