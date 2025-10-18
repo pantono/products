@@ -44,7 +44,7 @@ final class SpecialOffersMigration extends AbstractMigration
         $this->table('discount_rule')
             ->addColumn('discount_id', 'integer', ['signed' => false])
             ->addColumn('field', 'string')
-            ->addColumn('value', 'string')
+            ->addColumn('value', 'text')
             ->addColumn('operand', 'string')
             ->addColumn('include', 'boolean')
             ->addForeignKey('discount_id', 'discount', 'id')
