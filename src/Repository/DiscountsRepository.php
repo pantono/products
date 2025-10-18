@@ -53,7 +53,7 @@ class DiscountsRepository extends MysqlRepository
                 'field' => $rule->getField(),
                 'value' => $rule->getValue(),
                 'operand' => $rule->getOperand(),
-                'include' => $rule->isInclude()
+                'include' => $rule->isInclude() ? 1 : 0
             ]);
             if ($id) {
                 $rule->setId($id);
