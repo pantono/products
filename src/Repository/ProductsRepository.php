@@ -154,7 +154,12 @@ class ProductsRepository extends MysqlRepository
             $select->where('published.status_id=?', $filter->getStatus()->getId());
         }
         foreach ($filter->getColumns() as $column) {
-            $select->where($column['name'] . ' ' . $column['operator'] . ' ' . $column['placeholder'], $column['value']);
+            $operator = $column['operator'];
+            $value = $column['value'];
+            if ($operator === 'in' || $operator === 'not in') {
+                $value = explode(',', $value);
+            }
+            $select->where($column['name'] . ' ' . $operator . ' ' . $column['placeholder'], $value);
         }
         $filter->setTotalResults($this->getCount($select));
         $select->limitPage($filter->getPage(), $filter->getPerPage());
