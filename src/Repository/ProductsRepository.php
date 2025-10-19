@@ -156,7 +156,7 @@ class ProductsRepository extends MysqlRepository
         foreach ($filter->getColumns() as $column) {
             $operator = $column['operator'];
             $value = $column['value'];
-            if ($operator === 'in' || $operator === 'not in') {
+            if ($operator === 'IN' || $operator === 'NOT IN') {
                 $value = explode(',', $value);
             }
             $select->where($column['name'] . ' ' . $operator . ' ' . $column['placeholder'], $value);
