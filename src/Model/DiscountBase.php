@@ -2,6 +2,10 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Products\Discounts;
+
+#[Locator(methodName: 'getDiscountBaseById', className: Discounts::class)]
 class DiscountBase
 {
     private ?int $id = null;

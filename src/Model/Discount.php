@@ -13,7 +13,7 @@ class Discount
     use SavableModel;
 
     private ?int $id = null;
-    #[FieldName('base_id')]
+    #[FieldName('base_id'), Locator(methodName: 'getDiscountBaseById', className: Discounts::class)]
     private DiscountBase $base;
     private string $name;
     private ?float $amount = null;
