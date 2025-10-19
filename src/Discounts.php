@@ -138,6 +138,7 @@ class Discounts
     {
         $this->repository->clearProductsForOffer($offer);
         $filter = new ProductFilter();
+        $filter->setTotalResults(99999);
         $filter->setStatus($this->hydrator->lookupRecord(ProductStatus::class, ProductApproval::STATUS_APPROVED));
         $rules = $offer->getDiscount() ? $offer->getDiscount()->getRules() : [];
         foreach ($rules as $rule) {
