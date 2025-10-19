@@ -141,7 +141,12 @@ class Discounts
         $filter->setStatus($this->hydrator->lookupRecord(ProductStatus::class, ProductApproval::STATUS_APPROVED));
         $rules = $offer->getDiscount() ? $offer->getDiscount()->getRules() : [];
         foreach ($rules as $rule) {
-            $filter->addColumn($rule->getField(), $rule->getValue(), $rule->isInclude() ? $rule->getOperand() : $rule->getReverseOperand());
+            $value = $rule->getValue();
+            $operand = $rule->isInclude() ? $rule->getOperand() : $rule->getReverseOperand();
+            if ($operand === 'in' || $operand === 'not in') {
+                $value = explode(',', $value);
+            }
+            $filter->addColumn($rule->getField(), $value, $operand);
         }
         $total = 0;
         foreach ($this->products->getProductsByFilter($filter) as $product) {
