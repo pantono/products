@@ -27,7 +27,7 @@ class Discount
     /**
      * @var DiscountRule[]
      */
-    #[Locator(methodName: 'getRulesForDiscount', className: Discounts::class), FieldName('$this)')]
+    #[Locator(methodName: 'getRulesForDiscount', className: Discounts::class), FieldName('$this')]
     private array $rules = [];
 
     public function getId(): ?int
