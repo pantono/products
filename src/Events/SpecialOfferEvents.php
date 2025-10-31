@@ -42,7 +42,7 @@ class SpecialOfferEvents implements EventSubscriberInterface
         $filter = new SpecialOfferFilter();
         $filter->setPerPage(9999);
         foreach ($this->discounts->getOffersByFilter($filter) as $offer) {
-            if ($offer->isApplicable($event->getCurrent())) {
+            if ($offer->getDiscount() && $offer->getDiscount()->isApplicable($event->getCurrent())) {
                 $this->discounts->addProductToOffer($event->getCurrent(), $offer);
             }
         }

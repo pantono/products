@@ -41,6 +41,9 @@ class Discounts
         return $this->hydrator->hydrateSet(SpecialOffer::class, $this->repository->getOffersForProductVersion($version));
     }
 
+    /**
+     * @return SpecialOffer[]
+     */
     public function getOffersByFilter(SpecialOfferFilter $filter): array
     {
         return $this->hydrator->hydrateSet(SpecialOffer::class, $this->repository->getOffersByFilter($filter));
