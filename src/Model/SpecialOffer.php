@@ -71,6 +71,12 @@ class SpecialOffer
 
     public function isActive(): bool
     {
+        if ($this->getStartDate() > new \DateTime) {
+            return false;
+        }
+        if ($this->getEndDate() < new \DateTime) {
+            return false;
+        }
         return $this->active;
     }
 
