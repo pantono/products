@@ -18,7 +18,7 @@ class ProductPrice
 
     public function getVat(): float
     {
-        return ($this->getPrice() / 100) * $this->product->getVatRate()->getRate();
+        return $this->getPrice() * $this->product->getVatRate()->getRate();
     }
 
     public function getDiscount(): float
