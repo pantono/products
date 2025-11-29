@@ -179,7 +179,7 @@ final class ProductsMigration extends AbstractMigration
             ->addColumn('main_image', 'boolean')
             ->addColumn('deleted', 'boolean')
             ->addForeignKey('version_id', 'product_version', 'id')
-            ->addForeignKey('image_id', 'stored_file', 'id')
+            ->addForeignKey('image_id', 'image', 'id')
             ->create();
 
         $this->table('product_category')

@@ -7,6 +7,8 @@ use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
+use Pantono\Images\Model\Image;
+use Pantono\Images\Images;
 
 #[Locator(methodName: 'getProductImageBydId', className: Products::class)]
 class ProductImage
@@ -15,8 +17,8 @@ class ProductImage
 
     private ?int $id = null;
     private int $productId;
-    #[FieldName('image_id')]
-    private StoredFile $image;
+    #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
+    private ?Image $image = null;
     private bool $mainImage;
     private bool $deleted = false;
 
@@ -40,12 +42,12 @@ class ProductImage
         $this->productId = $productId;
     }
 
-    public function getImage(): StoredFile
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage(StoredFile $image): void
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
