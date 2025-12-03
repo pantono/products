@@ -5,6 +5,7 @@ namespace Pantono\Products\Model;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\FieldName;
+use Pantono\Utilities\DateTimeParser;
 
 class ProductField
 {
@@ -56,11 +57,18 @@ class ProductField
 
     public function getCastedValue(): mixed
     {
-        if ($this->getType()?->getType() === 'integer') {
+        $type = $this->getType()?->getType();
+        if ($type === 'integer') {
             return (int)$this->getValue();
         }
-        if ($this->getType()?->getType() === 'float') {
+        if ($type === 'float' || $type === 'number') {
             return (float)$this->getValue();
+        }
+        if ($type === 'boolean') {
+            return (bool)$this->getValue();
+        }
+        if ($type === 'date') {
+            return DateTimeParser::parseDate($this->getValue())?->format('Y-m-d');
         }
         return $this->getValue();
     }
