@@ -15,6 +15,7 @@ final class ProductFieldsMigration extends AbstractMigration
             ->addColumn('regex', 'string', ['null' => true])
             ->addColumn('allowed_values', 'json')
             ->addColumn('allowed_values_query', 'string', ['null' => true])
+            ->addColumn('ui_visible', 'boolean', ['default' => 1])
             ->create();
 
         $this->table('product_field', ['id' => false, 'primary_key' => ['product_version_id', 'type_id']])

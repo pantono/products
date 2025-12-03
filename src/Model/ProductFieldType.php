@@ -26,6 +26,7 @@ class ProductFieldType
      */
     #[Locator(methodName: 'populateAllowedValues', className: Products::class), FieldName('$this'), Lazy]
     private ?array $allowedValuesFromQuery = null;
+    private bool $uiVisible = true;
 
     public function getId(): ?int
     {
@@ -105,6 +106,16 @@ class ProductFieldType
     public function setAllowedValuesFromQuery(?array $allowedValuesFromQuery): void
     {
         $this->allowedValuesFromQuery = $allowedValuesFromQuery;
+    }
+
+    public function isUiVisible(): bool
+    {
+        return $this->uiVisible;
+    }
+
+    public function setUiVisible(bool $uiVisible): void
+    {
+        $this->uiVisible = $uiVisible;
     }
 
     public function getComputedAllowedValues(): array
