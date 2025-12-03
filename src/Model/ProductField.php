@@ -2,10 +2,15 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Products\Products;
+use Pantono\Contracts\Attributes\FieldName;
+
 class ProductField
 {
     private ?int $id = null;
     private int $productVersionId;
+    #[Locator(methodName: 'getFieldTypeById', className: Products::class), FieldName('type_id')]
     private ?ProductFieldType $type = null;
     private mixed $value;
 
