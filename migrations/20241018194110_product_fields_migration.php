@@ -18,8 +18,8 @@ final class ProductFieldsMigration extends AbstractMigration
             ->create();
 
         $this->table('product_field', ['id' => false, 'primary_key' => ['product_version_id', 'type_id']])
-            ->addColumn('product_version_id', 'integer', ['signed' => false])
-            ->addColumn('type_id', 'integer', ['signed' => false])
+            ->addColumn('product_version_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('type_id', 'integer', ['signed' => false, 'null' => false])
             ->addColumn('value', 'text')
             ->addForeignKey('type_id', 'product_field_type', 'id')
             ->addForeignKey('product_version_id', 'product_version', 'id')

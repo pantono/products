@@ -26,9 +26,9 @@ final class ProductStatsMigration extends AbstractMigration
 
         $this->table('product_stat')
             ->addColumn('date', 'datetime')
-            ->addColumn('type_id', 'integer', ['signed' => false])
-            ->addColumn('product_version_id', 'integer')
-            ->addColumn('product_id', 'integer')
+            ->addColumn('type_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('product_version_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('product_id', 'integer', ['signed' => false, 'null' => false])
             ->addColumn('user_id', 'integer', ['signed' => false, 'null' => true])
             ->addForeignKey('product_version_id', 'product_version', 'id')
             ->addForeignKey('product_id', 'product', 'id')
@@ -40,9 +40,9 @@ final class ProductStatsMigration extends AbstractMigration
 
 
         $this->table('product_stat_grouped', ['id' => false, 'primary_key' => ['date', 'type_id', 'product_version_id']])
-            ->addColumn('date', 'date')
-            ->addColumn('type_id', 'integer', ['signed' => false])
-            ->addColumn('product_version_id', 'integer', ['signed' => false])
+            ->addColumn('date', 'date', ['null' => false])
+            ->addColumn('type_id', 'integer', ['signed' => false, 'null' => false])
+            ->addColumn('product_version_id', 'integer', ['signed' => false, 'null' => false])
             ->addColumn('product_id', 'integer', ['null' => true, 'signed' => false])
             ->addColumn('count', 'integer')
             ->addForeignKey('type_id', 'product_stat_type', 'id')
