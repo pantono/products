@@ -22,6 +22,11 @@ use Pantono\Products\Model\ProductBrand;
 use Pantono\Products\Model\ProductCondition;
 use Pantono\Products\Event\PreBrandSaveEvent;
 use Pantono\Products\Event\PostBrandSaveEvent;
+use Pantono\Products\Model\ProductFieldType;
+use Pantono\Utilities\EphemeralCacheHelper;
+use Pantono\Products\Model\ProductField;
+use Pantono\Products\Event\PreProductFieldTypeSaveEvent;
+use Pantono\Products\Event\PostProductFieldTypeSaveEvent;
 
 class Products
 {
@@ -158,6 +163,23 @@ class Products
         return $this->hydrator->hydrateSet(Product::class, $this->repository->getProductsByFilter($filter));
     }
 
+
+    public function getFieldTypeById(int $id): ?ProductFieldType
+    {
+        $data = EphemeralCacheHelper::getItem('product_field_type_' . $id, function () use ($id) {
+            return $this->repository->getFieldTypeById($id);
+        });
+        return $this->hydrator->hydrate(ProductFieldType::class, $data);
+    }
+
+    /**
+     * @return ProductField[]
+     */
+    public function getFieldsForProductVersion(ProductVersion $product): array
+    {
+        return $this->hydrator->hydrateSet(ProductField::class, $this->repository->getFieldsForProductVersion($product));
+    }
+
     public function saveProductVersion(ProductVersion $product): void
     {
         $previous = $product->getId() ? $this->getProductVersionById($product->getId()) : null;
@@ -202,6 +224,22 @@ class Products
 
         $event = new PostBrandSaveEvent();
         $event->setCurrent($brand);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+    }
+
+    public function saveProductFieldType(ProductFieldType $type): void
+    {
+        $previous = $type->getId() ? $this->getFieldTypeById($type->getId()) : null;
+        $event = new PreProductFieldTypeSaveEvent();
+        $event->setCurrent($type);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+
+        $this->repository->saveProductFieldType($type);
+
+        $event = new PostProductFieldTypeSaveEvent();
+        $event->setCurrent($type);
         $event->setPrevious($previous);
         $this->dispatcher->dispatch($event);
     }

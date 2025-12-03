@@ -7,6 +7,7 @@ use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Filter\ProductFilter;
 use Pantono\Products\Model\Product;
 use Pantono\Products\Model\ProductBrand;
+use Pantono\Products\Model\ProductFieldType;
 
 class ProductsRepository extends MysqlRepository
 {
@@ -59,14 +60,15 @@ class ProductsRepository extends MysqlRepository
         return $this->selectRowsByValues('product_category', ['version_id' => $version->getId()], 'display_order');
     }
 
-    public function saveProductVersion(ProductVersion $product): void
+    public function saveProductVersion(ProductVersion $productVersion): void
     {
-        $id = $this->insertOrUpdateCheck('product_version', 'id', $product->getId(), $product->getAllData());
+        $id = $this->insertOrUpdateCheck('product_version', 'id', $productVersion->getId(), $productVersion->getAllData());
         if ($id) {
-            $product->setId($id);
+            $productVersion->setId($id);
         }
-        $this->saveImagesForProduct($product);
-        $this->saveCategoriesForProduct($product);
+        $this->saveImagesForProduct($productVersion);
+        $this->saveCategoriesForProduct($productVersion);
+        $this->saveFieldsForProduct($productVersion);
     }
 
     public function saveProduct(Product $product): void
@@ -96,6 +98,16 @@ class ProductsRepository extends MysqlRepository
             $params['id NOT IN (?)'] = $doneIds;
         }
         $this->getDb()->delete('product_category', $params);
+    }
+
+    private function saveFieldsForProduct(ProductVersion $version): void
+    {
+        $this->getDb()->delete('product_field', ['version_id=?' => $version->getId()]);
+        foreach ($version->getFields() as $field) {
+            if ($field->getType()) {
+                $this->insert('product_field', ['product_version_id' => $version->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
+            }
+        }
     }
 
     private function saveImagesForProduct(ProductVersion $product): void
@@ -215,6 +227,24 @@ class ProductsRepository extends MysqlRepository
         $id = $this->insertOrUpdateCheck('product_brand', 'id', $brand->getId(), ['id' => $brand->getId(), 'name' => $brand->getName()]);
         if ($id) {
             $brand->setId($id);
+        }
+    }
+
+    public function getFieldTypeById(int $id): ?array
+    {
+        return $this->selectSingleRow('product_field_type', 'id', $id);
+    }
+
+    public function getFieldsForProductVersion(ProductVersion $productVersion): array
+    {
+        return $this->selectRowsByValues('product_field_type', ['product_version_id' => $productVersion->getId()]);
+    }
+
+    public function saveProductFieldType(ProductFieldType $type): void
+    {
+        $id = $this->insertOrUpdate('product_field_type', 'id', $type->getId(), $type->getAllData());
+        if ($id) {
+            $type->setId($id);
         }
     }
 }

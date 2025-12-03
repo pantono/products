@@ -73,6 +73,11 @@ class ProductVersion
     private array $offers = [];
     #[NoSave]
     private ?ProductPrice $priceBreakdown = null;
+    /**
+     * @var ProductField[]
+     */
+    #[Locator(methodName: 'getFieldsForProductVersion', className: Products::class), FieldName('$this')]
+    private array $fields = [];
 
     public function getId(): ?int
     {
@@ -360,6 +365,29 @@ class ProductVersion
             $this->priceBreakdown = new ProductPrice($this);
         }
         return $this->priceBreakdown;
+    }
+
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    public function setFields(array $fields): void
+    {
+        $this->fields = $fields;
+    }
+
+    public function addField(ProductField $field): void
+    {
+        $this->fields[] = $field;
+    }
+
+    public function addFieldByType(ProductFieldType $type, mixed $value): void
+    {
+        $field = new ProductField();
+        $field->setType($type);
+        $field->setValue($value);
+        $this->fields[] = $field;
     }
 
     public function isOnOffer(): bool
