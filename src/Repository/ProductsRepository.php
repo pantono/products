@@ -237,7 +237,7 @@ class ProductsRepository extends MysqlRepository
 
     public function getFieldsForProductVersion(ProductVersion $productVersion): array
     {
-        return $this->selectRowsByValues('product_field_type', ['product_version_id' => $productVersion->getId()]);
+        return $this->selectRowsByValues('product_field', ['product_version_id' => $productVersion->getId()]);
     }
 
     public function saveProductFieldType(ProductFieldType $type): void
