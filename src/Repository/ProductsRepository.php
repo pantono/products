@@ -155,7 +155,7 @@ class ProductsRepository extends MysqlRepository
             ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=published.id', []);
 
         if ($filter->getSearch() !== null) {
-            $select->where('(published.name like ?', '%' . $filter->getSearch() . '%')
+            $select->where('(published.title like ?', '%' . $filter->getSearch() . '%')
                 ->orWhere('published.description like ?)', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getCategory() !== null) {
