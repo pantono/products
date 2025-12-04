@@ -156,7 +156,7 @@ class ProductsRepository extends MysqlRepository
 
         if ($filter->getSearch() !== null) {
             $select->where('(published.title like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('product.code like ?)', '%' . $filter->getSearch() . '%')
+                ->orWhere('product.code like ?', '%' . $filter->getSearch() . '%')
                 ->orWhere('published.description like ?)', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getCategory() !== null) {
