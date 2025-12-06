@@ -29,7 +29,8 @@ class CategoriesRepository extends MysqlRepository
 
     public function getCategoriesByFilter(CategoryFilter $filter): array
     {
-        $select = $this->getDb()->select()->from('category');
+        $select = $this->getDb()->select()->from('category')
+            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', []);
 
         if ($filter->getSearch() !== null) {
             $select->where('(name like ?', '%' . $filter->getSearch() . '%')
@@ -43,6 +44,7 @@ class CategoriesRepository extends MysqlRepository
         }
         $filter->setTotalResults($this->getCount($select));
         $select->limitPage($filter->getPage(), $filter->getPerPage());
+        $select->order($filter->getOrderBy());
         return $this->getDb()->fetchAll($select);
     }
 
