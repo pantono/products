@@ -192,8 +192,14 @@ class Category
         $this->fields = $fields;
     }
 
-    public function addField(CategoryFieldType $type, string $value): void
+    public function setFieldValue(CategoryFieldType $type, string $value): void
     {
+        foreach ($this->getFields() as $field) {
+            if ($field->getType()->getId() === $type->getId()) {
+                $field->setValue($value);
+                return;
+            }
+        }
         $categoryField = new CategoryField();
         $categoryField->setType($type);
         $categoryField->setValue($value);
