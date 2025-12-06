@@ -69,7 +69,7 @@ class Categories
 
     public function getFieldTypeById(int $id): ?CategoryFieldType
     {
-        return $this->$this->hydrator->hydrateCached('category_field_type_' . $id, CategoryFieldType::class, function () use ($id) {
+        return $this->hydrator->hydrateCached('category_field_type_' . $id, CategoryFieldType::class, function () use ($id) {
             return $this->repository->getFieldTypeById($id);
         });
     }
