@@ -9,7 +9,7 @@ class CategoryField
 {
     private int $categoryId;
     #[Locator(methodName: 'getFieldTypeById', className: Categories::class)]
-    private CategoryFieldType $type;
+    private ?CategoryFieldType $type = null;
     private string $value;
 
     public function getCategoryId(): int
@@ -22,12 +22,12 @@ class CategoryField
         $this->categoryId = $categoryId;
     }
 
-    public function getType(): CategoryFieldType
+    public function getType(): ?CategoryFieldType
     {
         return $this->type;
     }
 
-    public function setType(CategoryFieldType $type): void
+    public function setType(?CategoryFieldType $type): void
     {
         $this->type = $type;
     }
