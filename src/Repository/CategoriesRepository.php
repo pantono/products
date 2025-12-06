@@ -33,11 +33,16 @@ class CategoriesRepository extends MysqlRepository
             ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', []);
 
         if ($filter->getSearch() !== null) {
-            $select->where('(name like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('description like ?)', '%' . $filter->getSearch() . '%');
+            $select->where('(category.name like ?', '%' . $filter->getSearch() . '%')
+                ->orWhere('category.description like ?)', '%' . $filter->getSearch() . '%');
+        }
+        if ($filter->getParentId() === 0) {
+            $select->where('category.parent_id IS NULL');
+        } elseif ($filter->getParentId() !== null) {
+            $select->where('category.parent_id=?', $filter->getParentId());
         }
         if ($filter->getSlug() !== null) {
-            $select->where('slug=?', $filter->getSlug());
+            $select->where('category.slug=?', $filter->getSlug());
         }
         foreach ($filter->getColumns() as $column) {
             $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);

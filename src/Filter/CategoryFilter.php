@@ -12,6 +12,7 @@ class CategoryFilter implements PageableInterface
 
     private ?string $slug = null;
     private ?string $search = null;
+    private ?int $parentId = null;
     private string $orderBy = 'parent.display_order,category.display_order';
 
     public function getSlug(): ?string
@@ -42,5 +43,15 @@ class CategoryFilter implements PageableInterface
     public function setOrderBy(string $orderBy): void
     {
         $this->orderBy = $orderBy;
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?int $parentId): void
+    {
+        $this->parentId = $parentId;
     }
 }
