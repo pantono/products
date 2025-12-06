@@ -4,11 +4,12 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Categories;
+use Pantono\Contracts\Attributes\FieldName;
 
 class CategoryField
 {
     private int $categoryId;
-    #[Locator(methodName: 'getFieldTypeById', className: Categories::class)]
+    #[Locator(methodName: 'getFieldTypeById', className: Categories::class), FieldName('type_id')]
     private ?CategoryFieldType $type = null;
     private string $value;
 
