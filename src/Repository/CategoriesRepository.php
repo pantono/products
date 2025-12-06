@@ -70,6 +70,11 @@ class CategoriesRepository extends MysqlRepository
         return $this->selectSingleRow('category_field_type', 'id', $id);
     }
 
+    public function getFieldTypeByName(string $name): ?array
+    {
+        return $this->selectSingleRow('category_field_type', 'name', $name);
+    }
+
     public function saveCategoryFieldType(CategoryFieldType $type): void
     {
         $id = $this->insertOrUpdate('category_field_type', 'id', $type->getId(), $type->getAllData());

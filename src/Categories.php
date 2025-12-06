@@ -74,6 +74,11 @@ class Categories
         });
     }
 
+    public function getFieldTypeByName(string $name): ?CategoryFieldType
+    {
+        return $this->hydrator->hydrate(CategoryFieldType::class, $this->repository->getFieldTypeByName($name));
+    }
+
     /**
      * @param Category $category
      * @return CategoryField[]
