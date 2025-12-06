@@ -5,6 +5,7 @@ namespace Pantono\Products\Repository;
 use Pantono\Database\Repository\MysqlRepository;
 use Pantono\Products\Model\Category;
 use Pantono\Products\Filter\CategoryFilter;
+use Pantono\Products\Model\CategoryFieldType;
 
 class CategoriesRepository extends MysqlRepository
 {
@@ -23,6 +24,10 @@ class CategoriesRepository extends MysqlRepository
         $id = $this->insertOrUpdateCheck('category', 'id', $category->getId(), $category->getAllData());
         if ($id) {
             $category->setId($id);
+        }
+        $this->getDb()->delete('category_field', ['category_id' => $category->getId()]);
+        foreach ($category->getFields() as $field) {
+            $this->insert('category_field', ['category_id' => $category->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
         }
     }
 
@@ -58,5 +63,23 @@ class CategoriesRepository extends MysqlRepository
     public function getStatusById(int $id): ?array
     {
         return $this->selectSingleRow('category_status', 'id', $id);
+    }
+
+    public function getFieldTypeById(int $id): ?array
+    {
+        return $this->selectSingleRow('category_field_type', 'id', $id);
+    }
+
+    public function saveCategoryFieldType(CategoryFieldType $type): void
+    {
+        $id = $this->insertOrUpdate('category_field_type', 'id', $type->getId(), $type->getAllData());
+        if ($id) {
+            $type->setId($id);
+        }
+    }
+
+    public function getFieldsForCategory(Category $category): array
+    {
+        return $this->selectRowsByValues('category_field', ['category_id' => $category->getId()]);
     }
 }

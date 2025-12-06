@@ -10,6 +10,10 @@ use Pantono\Products\Event\PreCategorySaveEvent;
 use Pantono\Products\Event\PostCategorySaveEvent;
 use Pantono\Products\Filter\CategoryFilter;
 use Pantono\Products\Model\CategoryStatus;
+use Pantono\Products\Model\CategoryFieldType;
+use Pantono\Products\Event\PreCategoryFieldTypeSaveEvent;
+use Pantono\Products\Event\PostCategoryFieldTypeSaveEvent;
+use Pantono\Products\Model\CategoryField;
 
 class Categories
 {
@@ -59,6 +63,38 @@ class Categories
 
         $event = new PostCategorySaveEvent();
         $event->setCurrent($category);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+    }
+
+    public function getFieldTypeById(int $id): ?CategoryFieldType
+    {
+        return $this->$this->hydrator->hydrateCached('category_field_type_' . $id, CategoryFieldType::class, function () use ($id) {
+            return $this->repository->getFieldTypeById($id);
+        });
+    }
+
+    /**
+     * @param Category $category
+     * @return CategoryField[]
+     */
+    public function getFieldsForCategory(Category $category): array
+    {
+        return $this->hydrator->hydrateSet(CategoryField::class, $this->repository->getFieldsForCategory($category));
+    }
+
+    public function saveFieldType(CategoryFieldType $type): void
+    {
+        $previous = $type->getId() ? $this->getFieldTypeById($type->getId()) : null;
+        $event = new PreCategoryFieldTypeSaveEvent();
+        $event->setCurrent($type);
+        $event->setPrevious($previous);
+        $this->dispatcher->dispatch($event);
+
+        $this->repository->saveCategoryFieldType($type);
+
+        $event = new PostCategoryFieldTypeSaveEvent();
+        $event->setCurrent($type);
         $event->setPrevious($previous);
         $this->dispatcher->dispatch($event);
     }

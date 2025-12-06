@@ -49,9 +49,4 @@ class ProductStats
     {
         $this->repository->groupStats($type, $date);
     }
-
-    public function getStatsByFilter(ProductStatFilter $filter)
-    {
-        
-    }
 }

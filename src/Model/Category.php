@@ -36,6 +36,11 @@ class Category
     #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
     private ?Category $parent = null;
     private int $displayOrder = 0;
+    /**
+     * @var CategoryField[]
+     */
+    #[Locator(methodName: 'getFieldsForCategory', className: Categories::class), FieldName('$this')]
+    private array $fields = [];
 
     public function getId(): ?int
     {
@@ -175,5 +180,23 @@ class Category
     public function setBreadcrumb(?string $breadcrumb): void
     {
         $this->breadcrumb = $breadcrumb;
+    }
+
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    public function setFields(array $fields): void
+    {
+        $this->fields = $fields;
+    }
+
+    public function addField(CategoryFieldType $type, string $value): void
+    {
+        $categoryField = new CategoryField();
+        $categoryField->setType($type);
+        $categoryField->setValue($value);
+        $this->fields[] = $categoryField;
     }
 }

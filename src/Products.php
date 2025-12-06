@@ -53,12 +53,16 @@ class Products
 
     public function getProductTypeById(int $id): ?ProductType
     {
-        return $this->hydrator->hydrate(ProductType::class, $this->repository->getProductTypeById($id));
+        return $this->hydrator->hydrateCached('product_type_' . $id, ProductType::class, function () use ($id) {
+            return $this->repository->getProductTypeById($id);
+        });
     }
 
     public function getVatRateById(int $id): ?ProductVatRate
     {
-        return $this->hydrator->hydrate(ProductVatRate::class, $this->repository->getVatRateById($id));
+        return $this->hydrator->hydrateCached('vat_rate_' . $id, ProductVatRate::class, function () use ($id) {
+            return $this->repository->getVatRateById($id);
+        });
     }
 
     /**
@@ -71,7 +75,9 @@ class Products
 
     public function getStatusById(int $id): ?ProductStatus
     {
-        return $this->hydrator->hydrate(ProductStatus::class, $this->repository->getStatusById($id));
+        return $this->hydrator->hydrateCached('product_status_' . $id, ProductStatus::class, function () use ($id) {
+            return $this->repository->getStatusById($id);
+        });
     }
 
     /**
@@ -120,7 +126,9 @@ class Products
 
     public function getFlagById(int $id): ?Flag
     {
-        return $this->hydrator->hydrate(Flag::class, $this->repository->getFlagById($id));
+        return $this->hydrator->hydrateCached('flag_' . $id, Flag::class, function () use ($id) {
+            $this->repository->getFlagById($id);
+        });
     }
 
     /**
@@ -134,7 +142,9 @@ class Products
 
     public function getBrandById(int $id): ?ProductBrand
     {
-        return $this->hydrator->hydrate(ProductBrand::class, $this->repository->getBrandById($id));
+        return $this->hydrator->hydrateCached('product_brand_' . $id, ProductBrand::class, function () use ($id) {
+            $this->repository->getBrandById($id);
+        });
     }
 
     /**
@@ -147,7 +157,9 @@ class Products
 
     public function getConditionById(int $id): ?ProductCondition
     {
-        return $this->hydrator->hydrate(ProductCondition::class, $this->repository->getConditionById($id));
+        return $this->hydrator->hydrateCached('product_condition_' . $id, ProductCondition::class, function () use ($id) {
+            $this->repository->getConditionById($id);
+        });
     }
 
     /**
@@ -166,10 +178,9 @@ class Products
 
     public function getFieldTypeById(int $id): ?ProductFieldType
     {
-        $data = EphemeralCacheHelper::getItem('product_field_type_' . $id, function () use ($id) {
+        return $this->hydrator->hydrateCached('product_field_type_' . $id, ProductFieldType::class, function () use ($id) {
             return $this->repository->getFieldTypeById($id);
         });
-        return $this->hydrator->hydrate(ProductFieldType::class, $data);
     }
 
     /**

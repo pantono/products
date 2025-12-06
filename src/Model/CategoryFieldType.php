@@ -3,13 +3,12 @@
 namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Filter;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
-use Pantono\Contracts\Attributes\Lazy;
-use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\Locator;
+use Pantono\Products\Categories;
 
-class ProductFieldType
+#[Locator(methodName: 'getFieldTypeById', className: Categories::class)]
+class CategoryFieldType
 {
     use SavableModel;
 
@@ -24,12 +23,6 @@ class ProductFieldType
     #[Filter('json_decode')]
     private array $allowedValues = [];
     private ?string $allowedValuesQuery = null;
-    /**
-     * @var array<string,string>
-     */
-    #[Locator(methodName: 'populateAllowedValues', className: Products::class), FieldName('$this'), Lazy]
-    private ?array $allowedValuesFromQuery = null;
-    private bool $uiVisible = true;
 
     public function getId(): ?int
     {
@@ -99,51 +92,5 @@ class ProductFieldType
     public function setAllowedValuesQuery(?string $allowedValuesQuery): void
     {
         $this->allowedValuesQuery = $allowedValuesQuery;
-    }
-
-    public function getAllowedValuesFromQuery(): ?array
-    {
-        return $this->allowedValuesFromQuery;
-    }
-
-    public function setAllowedValuesFromQuery(?array $allowedValuesFromQuery): void
-    {
-        $this->allowedValuesFromQuery = $allowedValuesFromQuery;
-    }
-
-    public function isUiVisible(): bool
-    {
-        return $this->uiVisible;
-    }
-
-    public function setUiVisible(bool $uiVisible): void
-    {
-        $this->uiVisible = $uiVisible;
-    }
-
-    public function getComputedAllowedValues(): array
-    {
-        if ($this->getAllowedValues()) {
-            $values = $this->getAllowedValuesFromQuery();
-            if ($values === null) {
-                return $this->getAllowedValues();
-            }
-            return $values;
-        }
-        return $this->getAllowedValues();
-    }
-
-    public function isValid(mixed $value): bool
-    {
-        if ($this->getRegex() !== null) {
-            if (preg_match($this->getRegex(), $value) === 0) {
-                return false;
-            }
-        }
-
-        if ($this->getAllowedValuesQuery() || !empty($this->getAllowedValues())) {
-            return in_array($value, $this->getComputedAllowedValues());
-        }
-        return true;
     }
 }
