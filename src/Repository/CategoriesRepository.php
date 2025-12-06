@@ -25,7 +25,7 @@ class CategoriesRepository extends MysqlRepository
         if ($id) {
             $category->setId($id);
         }
-        $this->getDb()->delete('category_field', ['category_id' => $category->getId()]);
+        $this->getDb()->delete('category_field', ['category_id=?' => $category->getId()]);
         foreach ($category->getFields() as $field) {
             $this->insert('category_field', ['category_id' => $category->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
         }
