@@ -27,6 +27,8 @@ class Category
     private ?string $metaTitle = null;
     private ?string $metaKeywords = null;
     private ?string $metaRobots = null;
+    #[NoSave]
+    private ?string $breadcrumb = null;
     #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
     private ?Image $image = null;
     #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Categories::class)]
@@ -163,5 +165,15 @@ class Category
     public function setDisplayOrder(int $displayOrder): void
     {
         $this->displayOrder = $displayOrder;
+    }
+
+    public function getBreadcrumb(): ?string
+    {
+        return $this->breadcrumb;
+    }
+
+    public function setBreadcrumb(?string $breadcrumb): void
+    {
+        $this->breadcrumb = $breadcrumb;
     }
 }

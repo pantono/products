@@ -30,7 +30,9 @@ class CategoriesRepository extends MysqlRepository
     public function getCategoriesByFilter(CategoryFilter $filter): array
     {
         $select = $this->getDb()->select()->from('category')
-            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', []);
+            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', [])
+            ->joinLeft(['parent_parent' => 'category'], 'parent_parent.id=parent.parent_id', [])
+            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title)']);
 
         if ($filter->getSearch() !== null) {
             $select->where('(category.title like ?', '%' . $filter->getSearch() . '%')
