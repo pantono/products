@@ -103,4 +103,15 @@ class Categories
         $event->setPrevious($previous);
         $this->dispatcher->dispatch($event);
     }
+
+    /**
+     * @return Category[]
+     */
+    public function getChildrenForCategory(Category $category): array
+    {
+        if (!$category->getId()) {
+            return [];
+        }
+        return $this->hydrator->hydrateSet(Category::class, $this->repository->getChildren($category->getId()));
+    }
 }

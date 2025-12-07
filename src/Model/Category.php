@@ -35,6 +35,11 @@ class Category
     private ?CategoryStatus $status;
     #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
     private ?Category $parent = null;
+    /**
+     * @var Category[]
+     */
+    #[Locator(methodName: 'getChildrenForCategory', className: Categories::class), FieldName('$this'), Lazy, NoSave]
+    private array $children = [];
     private int $displayOrder = 0;
     /**
      * @var CategoryField[]
@@ -204,5 +209,15 @@ class Category
         $categoryField->setType($type);
         $categoryField->setValue($value);
         $this->fields[] = $categoryField;
+    }
+
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    public function setChildren(array $children): void
+    {
+        $this->children = $children;
     }
 }

@@ -87,4 +87,9 @@ class CategoriesRepository extends MysqlRepository
     {
         return $this->selectRowsByValues('category_field', ['category_id' => $category->getId()]);
     }
+
+    public function getChildren(int $id): array
+    {
+        return $this->selectRowsByValues('category', ['parent_id' => $id]);
+    }
 }
