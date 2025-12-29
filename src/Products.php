@@ -80,6 +80,11 @@ class Products
         });
     }
 
+    public function getAllStatuses(): array
+    {
+        return $this->hydrator->hydrateSet(ProductStatus::class, $this->repository->getAllStatuses());
+    }
+
     /**
      * @return ProductImage[]
      */

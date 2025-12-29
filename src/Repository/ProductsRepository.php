@@ -248,4 +248,9 @@ class ProductsRepository extends MysqlRepository
             $type->setId($id);
         }
     }
+
+    public function getAllStatuses(): array
+    {
+        return $this->selectAll('product_status');
+    }
 }
