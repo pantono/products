@@ -115,22 +115,11 @@ class ProductsRepository extends MysqlRepository
         if (!$product->getId()) {
             throw new \RuntimeException('Product must be saved before saving images');
         }
-        $doneIds = [];
+        $this->getDb()->delete('product_image', ['version_id=?' => $product->getId()]);
         foreach ($product->getImages() as $image) {
             $image->setVersionId($product->getId());
-            $id = $this->insertOrUpdateCheck('product_image', 'id', $image->getId(), $image->getAllData());
-            if ($id) {
-                $image->setId($id);
-            }
-            $doneIds[] = $image->getId();
+            $this->getDb()->insert('product_image', $image->getAllData());
         }
-        $params = [
-            'version_id=?' => $product->getId()
-        ];
-        if (!empty($doneIds)) {
-            $params['id NOT IN (?)'] = $doneIds;
-        }
-        $this->getDb()->delete('product_image', $params);
     }
 
     public function getRelatedProducts(ProductVersion $product): array
