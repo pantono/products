@@ -16,7 +16,7 @@ class ProductImage
     use SavableModel;
 
     private ?int $id = null;
-    private int $productId;
+    private int $versionId;
     #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
     private ?Image $image = null;
     private bool $mainImage;
@@ -32,14 +32,14 @@ class ProductImage
         $this->id = $id;
     }
 
-    public function getProductId(): int
+    public function getVersionId(): int
     {
-        return $this->productId;
+        return $this->versionId;
     }
 
-    public function setProductId(int $productId): void
+    public function setVersionId(int $versionId): void
     {
-        $this->productId = $productId;
+        $this->versionId = $versionId;
     }
 
     public function getImage(): ?Image

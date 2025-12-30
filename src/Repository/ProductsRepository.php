@@ -117,6 +117,7 @@ class ProductsRepository extends MysqlRepository
         }
         $doneIds = [];
         foreach ($product->getImages() as $image) {
+            $image->setVersionId($product->getId());
             $id = $this->insertOrUpdateCheck('product_image', 'id', $image->getId(), $image->getAllData());
             if ($id) {
                 $image->setId($id);
