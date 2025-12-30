@@ -96,6 +96,6 @@ class CategoriesRepository extends MysqlRepository
         return $this->getDb()->select()->from('category')
             ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', [])
             ->joinLeft(['parent_parent' => 'category'], 'parent_parent.id=parent.parent_id', [])
-            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title)']);
+            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title) as breadcrumb']);
     }
 }
