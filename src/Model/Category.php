@@ -197,11 +197,11 @@ class Category
         $this->fields = $fields;
     }
 
-    public function getFieldValueByName(string $name): ?string
+    public function getFieldValueByName(string $name): mixed
     {
         foreach ($this->getFields() as $field) {
             if ($field->getType()->getName() === $name) {
-                return $field->getValue();
+                return $field->getCastedValue();
             }
         }
         return null;
