@@ -6,17 +6,18 @@ use Pantono\Database\Repository\MysqlRepository;
 use Pantono\Products\Model\Category;
 use Pantono\Products\Filter\CategoryFilter;
 use Pantono\Products\Model\CategoryFieldType;
+use Pantono\Database\Query\Select\Select;
 
 class CategoriesRepository extends MysqlRepository
 {
     public function getCategoryById(int $id): ?array
     {
-        return $this->selectSingleRow('category', 'id', $id);
+        return $this->selectSingleRowFromQuery($this->getCategoryBaseSelect()->where('category.id=?', $id));
     }
 
     public function getCategoryBySlug(string $slug): ?array
     {
-        return $this->selectSingleRow('category', 'slug', $slug);
+        return $this->selectSingleRowFromQuery($this->getCategoryBaseSelect()->where('category.slug=?', $slug));
     }
 
     public function saveCategory(Category $category): void
@@ -34,10 +35,7 @@ class CategoriesRepository extends MysqlRepository
 
     public function getCategoriesByFilter(CategoryFilter $filter): array
     {
-        $select = $this->getDb()->select()->from('category')
-            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', [])
-            ->joinLeft(['parent_parent' => 'category'], 'parent_parent.id=parent.parent_id', [])
-            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title)']);
+        $select = $this->getCategoryBaseSelect();
 
         if ($filter->getSearch() !== null) {
             $select->where('(category.title like ?', '%' . $filter->getSearch() . '%')
@@ -91,5 +89,13 @@ class CategoriesRepository extends MysqlRepository
     public function getChildren(int $id): array
     {
         return $this->selectRowsByValues('category', ['parent_id' => $id]);
+    }
+
+    private function getCategoryBaseSelect(): Select
+    {
+        return $this->getDb()->select()->from('category')
+            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', [])
+            ->joinLeft(['parent_parent' => 'category'], 'parent_parent.id=parent.parent_id', [])
+            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title)']);
     }
 }
