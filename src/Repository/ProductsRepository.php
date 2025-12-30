@@ -149,9 +149,9 @@ class ProductsRepository extends MysqlRepository
                 ->orWhere('product.code like ?', '%' . $filter->getSearch() . '%')
                 ->orWhere('published.description like ?)', '%' . $filter->getSearch() . '%');
         }
-        if ($filter->getCategory() !== null) {
+        if (!empty($filter->getCategoryIds())) {
             $select->joinInner('product_category', 'product_category.version_id=product.published_draft_id', [])
-                ->where('product_category.category_id=?', $filter->getCategory()->getId());
+                ->where('product_category.category_id IN (?)', $filter->getCategoryIds());
         }
         if ($filter->getStatus() !== null) {
             $select->where('published.status_id=?', $filter->getStatus()->getId());

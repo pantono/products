@@ -14,8 +14,8 @@ class ProductFilter implements PageableInterface
 
     private ?ProductStatus $status = null;
     private ?string $search = null;
+    private array $categoryIds = [];
 
-    private ?Category $category = null;
 
     public function getStatus(): ?ProductStatus
     {
@@ -37,13 +37,13 @@ class ProductFilter implements PageableInterface
         $this->search = $search;
     }
 
-    public function getCategory(): ?Category
+    public function getCategoryIds(): array
     {
-        return $this->category;
+        return $this->categoryIds;
     }
 
-    public function setCategory(?Category $category): void
+    public function setCategoryIds(array $categoryIds): void
     {
-        $this->category = $category;
+        $this->categoryIds = $categoryIds;
     }
 }
