@@ -102,7 +102,7 @@ class ProductsRepository extends MysqlRepository
 
     private function saveFieldsForProduct(ProductVersion $version): void
     {
-        $this->getDb()->delete('product_field', ['version_id=?' => $version->getId()]);
+        $this->getDb()->delete('product_field', ['product_version_id=?' => $version->getId()]);
         foreach ($version->getFields() as $field) {
             if ($field->getType()) {
                 $this->insert('product_field', ['product_version_id' => $version->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
