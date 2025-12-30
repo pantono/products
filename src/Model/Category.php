@@ -197,6 +197,16 @@ class Category
         $this->fields = $fields;
     }
 
+    public function getFieldValueByName(string $name): ?string
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getType()->getName() === $name) {
+                return $field->getValue();
+            }
+        }
+        return null;
+    }
+
     public function setFieldValue(CategoryFieldType $type, string $value): void
     {
         foreach ($this->getFields() as $field) {
