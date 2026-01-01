@@ -92,7 +92,7 @@ class Categories
     public function getFieldsForCategory(Category $category): array
     {
         return $this->hydrator->hydrateSetCached('category_fields_' . $category->getId(), CategoryField::class, function () use ($category) {
-            $this->repository->getFieldsForCategory($category);
+            return $this->repository->getFieldsForCategory($category);
         });
     }
 
