@@ -15,6 +15,7 @@ class ProductFilter implements PageableInterface
     private ?ProductStatus $status = null;
     private ?string $search = null;
     private array $categoryIds = [];
+    private string $orderBy = 'product_version.date_added DESC';
 
 
     public function getStatus(): ?ProductStatus
@@ -45,5 +46,15 @@ class ProductFilter implements PageableInterface
     public function setCategoryIds(array $categoryIds): void
     {
         $this->categoryIds = $categoryIds;
+    }
+
+    public function getOrderBy(): string
+    {
+        return $this->orderBy;
+    }
+
+    public function setOrderBy(string $orderBy): void
+    {
+        $this->orderBy = $orderBy;
     }
 }

@@ -142,7 +142,8 @@ class ProductsRepository extends MysqlRepository
     public function getProductsByFilter(ProductFilter $filter): array
     {
         $select = $this->getDb()->select()->from('product')
-            ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=published.id', []);
+            ->joinLeft(['published' => 'product_version'], 'product.published_draft_id=published.id', [])
+            ->order($filter->getOrderBy());
 
         if ($filter->getSearch() !== null) {
             $select->where('(published.title like ?', '%' . $filter->getSearch() . '%')
