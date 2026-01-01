@@ -15,7 +15,7 @@ class ProductFilter implements PageableInterface
     private ?ProductStatus $status = null;
     private ?string $search = null;
     private array $categoryIds = [];
-    private string $orderBy = 'product_version.date_added DESC';
+    private string $orderBy = 'published.date_added DESC';
 
 
     public function getStatus(): ?ProductStatus
