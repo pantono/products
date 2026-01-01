@@ -80,7 +80,9 @@ class Categories
 
     public function getFieldTypeByName(string $name): ?CategoryFieldType
     {
-        return $this->hydrator->hydrate(CategoryFieldType::class, $this->repository->getFieldTypeByName($name));
+        return $this->hydrator->hydrateCached('category_field_type_name_' . $name, CategoryFieldType::class, function () use ($name) {
+            return $this->repository->getFieldTypeByName($name);
+        });
     }
 
     /**
@@ -89,7 +91,9 @@ class Categories
      */
     public function getFieldsForCategory(Category $category): array
     {
-        return $this->hydrator->hydrateSet(CategoryField::class, $this->repository->getFieldsForCategory($category));
+        return $this->hydrator->hydrateSetCached('category_fields_' . $category->getId(), CategoryField::class, function () use ($category) {
+            $this->repository->getFieldsForCategory($category);
+        });
     }
 
     public function saveFieldType(CategoryFieldType $type): void
