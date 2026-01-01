@@ -30,12 +30,16 @@ class Categories
 
     public function getCategoryById(int $id): ?Category
     {
-        return $this->hydrator->hydrate(Category::class, $this->repository->getCategoryById($id));
+        return $this->hydrator->hydrateCached('category_' . $id, Category::class, function () use ($id) {
+            return $this->repository->getCategoryById($id);
+        });
     }
 
     public function getCategoryBySlug(string $slug): ?Category
     {
-        return $this->hydrator->hydrate(Category::class, $this->repository->getCategoryBySlug($slug));
+        return $this->hydrator->hydrateCached('category_slug_' . $slug, Category::class, function () use ($slug) {
+            return $this->repository->getCategoryBySlug($slug);
+        });
     }
 
     /**
@@ -112,6 +116,8 @@ class Categories
         if (!$category->getId()) {
             return [];
         }
-        return $this->hydrator->hydrateSet(Category::class, $this->repository->getChildren($category->getId()));
+        return $this->hydrator->hydrateSetCached('category_children_' . $category->getId(), Category::class, function () use ($category) {
+            return $this->repository->getChildren($category->getId());
+        });
     }
 }

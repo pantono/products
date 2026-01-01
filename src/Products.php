@@ -23,7 +23,6 @@ use Pantono\Products\Model\ProductCondition;
 use Pantono\Products\Event\PreBrandSaveEvent;
 use Pantono\Products\Event\PostBrandSaveEvent;
 use Pantono\Products\Model\ProductFieldType;
-use Pantono\Utilities\EphemeralCacheHelper;
 use Pantono\Products\Model\ProductField;
 use Pantono\Products\Event\PreProductFieldTypeSaveEvent;
 use Pantono\Products\Event\PostProductFieldTypeSaveEvent;

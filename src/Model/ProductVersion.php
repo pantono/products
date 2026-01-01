@@ -44,7 +44,7 @@ class ProductVersion
     private ?ProductCondition $condition = null;
     private float $price;
     private float $rrp;
-    #[FieldName('company_id'), Locator(methodName: 'getCompanyById', className: Companies::class)]
+    #[FieldName('company_id'), Locator(methodName: 'getCompanyById', className: Companies::class), Lazy]
     private ?Company $company = null;
     /**
      * @var ProductImage[]

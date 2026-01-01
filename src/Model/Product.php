@@ -7,6 +7,7 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Products\Products;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\Lazy;
 
 #[Locator(methodName: 'getProductById', className: Products::class)]
 class Product
@@ -16,9 +17,9 @@ class Product
     private ?int $id = null;
     private ?DateTimeInterface $dateCreated = null;
     private ?DateTimeInterface $dateUpdated = null;
-    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('draft_id')]
+    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('draft_id'), Lazy]
     private ProductVersion $draft;
-    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('published_draft_id')]
+    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('published_draft_id'), Lazy]
     private ProductVersion $publishedDraft;
     private string $code;
     private string $slug;
