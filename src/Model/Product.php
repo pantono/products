@@ -18,9 +18,9 @@ class Product
     private ?DateTimeInterface $dateCreated = null;
     private ?DateTimeInterface $dateUpdated = null;
     #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('draft_id'), Lazy]
-    private ProductVersion $draft;
+    private ?ProductVersion $draft = null;
     #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('published_draft_id'), Lazy]
-    private ProductVersion $publishedDraft;
+    private ?ProductVersion $publishedDraft = null;
     private string $code;
     private string $slug;
 
@@ -54,22 +54,22 @@ class Product
         $this->dateUpdated = $dateUpdated;
     }
 
-    public function getDraft(): ProductVersion
+    public function getDraft(): ?ProductVersion
     {
         return $this->draft;
     }
 
-    public function setDraft(ProductVersion $draft): void
+    public function setDraft(?ProductVersion $draft): void
     {
         $this->draft = $draft;
     }
 
-    public function getPublishedDraft(): ProductVersion
+    public function getPublishedDraft(): ?ProductVersion
     {
         return $this->publishedDraft;
     }
 
-    public function setPublishedDraft(ProductVersion $publishedDraft): void
+    public function setPublishedDraft(?ProductVersion $publishedDraft): void
     {
         $this->publishedDraft = $publishedDraft;
     }
