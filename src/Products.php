@@ -156,7 +156,9 @@ class Products
      */
     public function getAllBrands(): array
     {
-        return $this->hydrator->hydrateSet(ProductBrand::class, $this->repository->getAllBrands());
+        return $this->hydrator->hydrateSetCached('brands', ProductBrand::class, function () {
+            return $this->repository->getAllBrands();
+        });
     }
 
     public function getConditionById(int $id): ?ProductCondition
