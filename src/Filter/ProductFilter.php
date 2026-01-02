@@ -48,12 +48,12 @@ class ProductFilter implements PageableInterface
         $this->categoryIds = $categoryIds;
     }
 
-    public function getOrderBy(): string
+    public function getOrderBy(): ?string
     {
         return $this->orderBy;
     }
 
-    public function setOrderBy(string $orderBy): void
+    public function setOrderBy(?string $orderBy): void
     {
         $this->orderBy = $orderBy;
     }
