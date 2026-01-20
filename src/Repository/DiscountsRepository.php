@@ -2,14 +2,14 @@
 
 namespace Pantono\Products\Repository;
 
-use Pantono\Database\Repository\MysqlRepository;
+use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\Discount;
 use Pantono\Products\Model\DiscountCode;
 use Pantono\Products\Filter\SpecialOfferFilter;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Model\SpecialOffer;
 
-class DiscountsRepository extends MysqlRepository
+class DiscountsRepository extends DefaultRepository
 {
     public function getDiscountBaseById(int $id): ?array
     {

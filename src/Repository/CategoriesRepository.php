@@ -2,13 +2,13 @@
 
 namespace Pantono\Products\Repository;
 
-use Pantono\Database\Repository\MysqlRepository;
+use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\Category;
 use Pantono\Products\Filter\CategoryFilter;
 use Pantono\Products\Model\CategoryFieldType;
 use Pantono\Database\Query\Select\Select;
 
-class CategoriesRepository extends MysqlRepository
+class CategoriesRepository extends DefaultRepository
 {
     public function getCategoryById(int $id): ?array
     {

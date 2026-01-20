@@ -2,14 +2,14 @@
 
 namespace Pantono\Products\Repository;
 
-use Pantono\Database\Repository\MysqlRepository;
+use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Filter\ProductFilter;
 use Pantono\Products\Model\Product;
 use Pantono\Products\Model\ProductBrand;
 use Pantono\Products\Model\ProductFieldType;
 
-class ProductsRepository extends MysqlRepository
+class ProductsRepository extends DefaultRepository
 {
     public function getProductTypeById(int $id): ?array
     {

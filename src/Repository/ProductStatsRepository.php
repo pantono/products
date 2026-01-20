@@ -2,11 +2,11 @@
 
 namespace Pantono\Products\Repository;
 
-use Pantono\Database\Repository\MysqlRepository;
+use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Model\ProductStatType;
 
-class ProductStatsRepository extends MysqlRepository
+class ProductStatsRepository extends DefaultRepository
 {
     public function logStatForProduct(ProductVersion $version, ProductStatType $type, ?int $userId = null, \DateTimeInterface $date = new \DateTimeImmutable()): void
     {

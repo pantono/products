@@ -14,6 +14,9 @@ class ProductFilter implements PageableInterface
 
     private ?ProductStatus $status = null;
     private ?string $search = null;
+    /**
+     * @var array<int>
+     */
     private array $categoryIds = [];
     private ?string $orderBy = null;
 

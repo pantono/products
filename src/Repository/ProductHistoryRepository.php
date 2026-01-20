@@ -2,12 +2,12 @@
 
 namespace Pantono\Products\Repository;
 
-use Pantono\Database\Repository\MysqlRepository;
+use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Authentication\Model\User;
 use Pantono\Products\Filter\ProductHistoryFilter;
 
-class ProductHistoryRepository extends MysqlRepository
+class ProductHistoryRepository extends DefaultRepository
 {
     public function saveHistoryForVersion(ProductVersion $version, User $user, string $entry): void
     {
