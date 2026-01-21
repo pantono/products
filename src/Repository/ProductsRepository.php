@@ -219,7 +219,7 @@ class ProductsRepository extends DefaultRepository
 
     public function saveBrand(ProductBrand $brand): void
     {
-        $id = $this->insertOrUpdateCheck('product_brand', 'id', $brand->getId(), ['id' => $brand->getId(), 'name' => $brand->getName()]);
+        $id = $this->insertOrUpdateCheck('product_brand', 'id', $brand->getId(), ['name' => $brand->getName()]);
         if ($id) {
             $brand->setId($id);
         }
