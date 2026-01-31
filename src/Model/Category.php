@@ -12,8 +12,9 @@ use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Images\Images;
 use Pantono\Images\Model\Image;
+use Pantono\Contracts\Attributes\EagerLoad;
 
-#[Locator(methodName: 'getCategoryById', className: Categories::class)]
+#[Locator(methodName: 'getCategoryById', className: Categories::class), EagerLoad]
 class Category
 {
     use SavableModel;
@@ -29,9 +30,9 @@ class Category
     private ?string $metaRobots = null;
     #[NoSave]
     private ?string $breadcrumb = null;
-    #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
+    #[FieldName('image_id')]
     private ?Image $image = null;
-    #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Categories::class)]
+    #[FieldName('status_id')]
     private ?CategoryStatus $status;
     #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
     private ?Category $parent = null;

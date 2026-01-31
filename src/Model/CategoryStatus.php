@@ -4,8 +4,9 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Categories;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getStatusById', className: Categories::class)]
+#[Locator(methodName: 'getStatusById', className: Categories::class), DatabaseTable(table: 'category_status', idColumn: 'id')]
 class CategoryStatus
 {
     private ?int $id = null;
