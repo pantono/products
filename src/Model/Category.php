@@ -45,7 +45,7 @@ class Category
     /**
      * @var CategoryField[]
      */
-    #[Locator(methodName: 'getFieldsForCategory', className: Categories::class), FieldName('$this')]
+    #[Locator(methodName: 'getFieldsForCategory', className: Categories::class), FieldName('$this'), Lazy]
     private array $fields = [];
 
     public function getId(): ?int
