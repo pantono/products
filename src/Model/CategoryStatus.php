@@ -5,10 +5,14 @@ namespace Pantono\Products\Model;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Application\Interfaces\SavableInterface;
+use Pantono\Database\Traits\SavableModel;
 
 #[Locator(methodName: 'getStatusById', className: Categories::class), DatabaseTable(table: 'category_status', idColumn: 'id')]
-class CategoryStatus
+class CategoryStatus implements SavableInterface
 {
+    use SavableModel;
+
     private ?int $id = null;
     private string $name;
     private bool $visible;
