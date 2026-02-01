@@ -10,8 +10,8 @@ use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Images\Model\Image;
 use Pantono\Contracts\Attributes\EagerLoad;
-use Pantono\Database\Attributes\OneToOne;
-use Pantono\Database\Attributes\OneToMany;
+use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\Database\OneToMany;
 
 #[Locator(methodName: 'getCategoryById', className: Categories::class), EagerLoad]
 class Category
