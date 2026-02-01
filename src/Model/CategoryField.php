@@ -6,7 +6,9 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Utilities\DateTimeParser;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
+#[DatabaseTable(table: 'category_field', idColumn: 'id')]
 class CategoryField
 {
     private int $categoryId;

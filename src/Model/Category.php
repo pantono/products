@@ -2,17 +2,16 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Storage\Model\StoredFile;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Locator;
-use Pantono\Storage\FileStorage;
 use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\NoSave;
-use Pantono\Images\Images;
 use Pantono\Images\Model\Image;
 use Pantono\Contracts\Attributes\EagerLoad;
+use Pantono\Database\Attributes\OneToOne;
+use Pantono\Database\Attributes\OneToMany;
 
 #[Locator(methodName: 'getCategoryById', className: Categories::class), EagerLoad]
 class Category
@@ -30,22 +29,22 @@ class Category
     private ?string $metaRobots = null;
     #[NoSave]
     private ?string $breadcrumb = null;
-    #[FieldName('image_id')]
+    #[FieldName('image_id'), OneToOne(targetModel: Image::class)]
     private ?Image $image = null;
-    #[FieldName('status_id')]
+    #[FieldName('status_id'), OneToOne(targetModel: CategoryStatus::class)]
     private ?CategoryStatus $status;
-    #[Locator(methodName: 'getCategoryById', className: Categories::class), FieldName('parent_id'), Lazy, NoSave]
+    #[FieldName('parent_id'), OneToOne(targetModel: Category::class)]
     private ?Category $parent = null;
     /**
      * @var Category[]
      */
-    #[Locator(methodName: 'getChildrenForCategory', className: Categories::class), FieldName('$this'), Lazy, NoSave]
+    #[Lazy, NoSave, OneToMany(targetModel: Category::class, mappedBy: 'parent_id')]
     private array $children = [];
     private int $displayOrder = 0;
     /**
      * @var CategoryField[]
      */
-    #[Locator(methodName: 'getFieldsForCategory', className: Categories::class), FieldName('$this'), Lazy]
+    #[Lazy, OneToMany(targetModel: CategoryField::class, mappedBy: 'category_id')]
     private array $fields = [];
 
     public function getId(): ?int
