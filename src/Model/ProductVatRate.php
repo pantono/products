@@ -50,4 +50,9 @@ class ProductVatRate
     {
         return $price / (1 + $this->getRate());
     }
+
+    public function calculateVat(float $price): float
+    {
+        return $price - $this->calculateNet($price);
+    }
 }
