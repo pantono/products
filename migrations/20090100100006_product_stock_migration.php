@@ -8,12 +8,14 @@ final class ProductStockMigration extends BasePantonoMigration
 {
     public function up(): void
     {
-        $this->table($this->addTablePrefix('product_version'))
-            ->removeColumn('stock_holding')
-            ->update();
-
         $this->table($this->addTablePrefix('product'))
             ->addColumn('stock_holding', 'integer')
+            ->update();
+
+        $this->query('UPDATE ' . $this->addTablePrefix('product') . ' p INNER JOIN ' . $this->addTablePrefix('product_version') . ' v on p.published_draft_id=v.id SET p.stock_holding=v.stock_holding');
+
+        $this->table($this->addTablePrefix('product_version'))
+            ->removeColumn('stock_holding')
             ->update();
 
         $this->table($this->addTablePrefix('product_stock_movement'))
@@ -31,6 +33,8 @@ final class ProductStockMigration extends BasePantonoMigration
         $this->table($this->addTablePrefix('product_version'))
             ->addColumn('stock_holding', 'integer')
             ->update();
+
+        $this->query('UPDATE ' . $this->addTablePrefix('product') . ' p INNER JOIN ' . $this->addTablePrefix('product_version') . ' v on p.published_draft_id=v.id SET v.stock_holding=p.stock_holding');
 
         $this->table($this->addTablePrefix('product'))
             ->removeColumn('stock_holding')
