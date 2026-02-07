@@ -40,4 +40,14 @@ class ProductVatRate
     {
         $this->rate = $rate;
     }
+
+    public function addToPrice(float $price): float
+    {
+        return $price + ($price * $this->getRate());
+    }
+
+    public function calculateNet(float $price): float
+    {
+        return $price / (1 + $this->getRate());
+    }
 }
