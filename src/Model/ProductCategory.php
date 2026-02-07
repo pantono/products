@@ -3,12 +3,11 @@
 namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\FieldName;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getProductCategoryById', className: Products::class)]
+#[DatabaseTable(table: 'product_category', idColumn: 'id')]
 class ProductCategory
 {
     use SavableModel;
