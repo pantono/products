@@ -12,7 +12,13 @@ final class ProductStockMigration extends BasePantonoMigration
             ->addColumn('stock_holding', 'integer')
             ->update();
 
-        $this->query('UPDATE ' . $this->addTablePrefix('product') . ' p INNER JOIN ' . $this->addTablePrefix('product_version') . ' v on p.published_draft_id=v.id SET p.stock_holding=v.stock_holding');
+        $productTable = $this->addTablePrefix('product');
+        $versionTable = $this->addTablePrefix('product_version');
+        if ($this->getAdapter()->getAdapterType() === 'mysql') {
+            $this->query('UPDATE ' . $productTable . ' p INNER JOIN ' . $versionTable . ' v on (p.published_draft_id=v.id OR (p.published_draft_id IS NULL AND p.draft_id=v.id)) SET p.stock_holding=v.stock_holding');
+        } else {
+            $this->query('UPDATE ' . $productTable . ' SET stock_holding = v.stock_holding FROM ' . $versionTable . ' v WHERE (' . $productTable . '.published_draft_id=v.id OR (' . $productTable . '.published_draft_id IS NULL AND ' . $productTable . '.draft_id=v.id))');
+        }
 
         $this->table($this->addTablePrefix('product_version'))
             ->removeColumn('stock_holding')
@@ -34,7 +40,13 @@ final class ProductStockMigration extends BasePantonoMigration
             ->addColumn('stock_holding', 'integer')
             ->update();
 
-        $this->query('UPDATE ' . $this->addTablePrefix('product') . ' p INNER JOIN ' . $this->addTablePrefix('product_version') . ' v on p.published_draft_id=v.id SET v.stock_holding=p.stock_holding');
+        $productTable = $this->addTablePrefix('product');
+        $versionTable = $this->addTablePrefix('product_version');
+        if ($this->getAdapter()->getAdapterType() === 'mysql') {
+            $this->query('UPDATE ' . $productTable . ' p INNER JOIN ' . $versionTable . ' v on (p.published_draft_id=v.id OR (p.published_draft_id IS NULL AND p.draft_id=v.id)) SET v.stock_holding=p.stock_holding');
+        } else {
+            $this->query('UPDATE ' . $versionTable . ' SET stock_holding = p.stock_holding FROM ' . $productTable . ' p WHERE (p.published_draft_id=' . $versionTable . '.id OR (p.published_draft_id IS NULL AND p.draft_id=' . $versionTable . '.id))');
+        }
 
         $this->table($this->addTablePrefix('product'))
             ->removeColumn('stock_holding')
