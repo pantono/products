@@ -26,6 +26,8 @@ use Pantono\Products\Model\ProductFieldType;
 use Pantono\Products\Model\ProductField;
 use Pantono\Products\Event\PreProductFieldTypeSaveEvent;
 use Pantono\Products\Event\PostProductFieldTypeSaveEvent;
+use Pantono\Authentication\Model\User;
+use Pantono\Products\Model\ProductStockMovement;
 
 class Products
 {
@@ -259,5 +261,27 @@ class Products
         $event->setCurrent($type);
         $event->setPrevious($previous);
         $this->dispatcher->dispatch($event);
+    }
+
+    public function logStockMovement(Product $product, int $value, ?string $comments = null, ?int $orderId = null, ?User $user = null): ProductStockMovement
+    {
+        $movement = new ProductStockMovement();
+        $movement->setProductId($product->getId());
+        $movement->setDate(new \DateTime);
+        $movement->setValue($value);
+        if ($comments) {
+            $movement->setComments($comments);
+        }
+        if ($orderId) {
+            $movement->setOrderId($orderId);
+        }
+        if ($user) {
+            $movement->setUser($user);
+        }
+        $this->repository->saveModel($movement);
+
+        $product->setStockHolding($product->getStockHolding() + $value);
+        $this->saveProduct($product);
+        return $movement;
     }
 }

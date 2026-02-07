@@ -16,11 +16,13 @@ final class ProductStockMigration extends BasePantonoMigration
             ->addColumn('stock_holding', 'integer')
             ->update();
 
-        $this->table($this->addTablePrefix('product_stock_history'))
+        $this->table($this->addTablePrefix('product_stock_movement'))
             ->addLinkedColumn('product_id', $this->addTablePrefix('product'), 'id')
-            ->addLinkedColumn('user_id', $this->addTablePrefix('user'), 'id')
+            ->addLinkedColumn('user_id', $this->addTablePrefix('user'), 'id', ['null' => true])
+            ->addLinkedColumn('order_id', $this->addTablePrefix('order'), 'id', ['null' => true])
             ->addColumn('date', 'datetime')
             ->addColumn('value', 'integer')
+            ->addColumn('comments', 'text', ['null' => true])
             ->create();
     }
 
@@ -34,7 +36,7 @@ final class ProductStockMigration extends BasePantonoMigration
             ->removeColumn('stock_holding')
             ->update();
 
-        $this->table($this->addTablePrefix('product_stock_history'))
+        $this->table($this->addTablePrefix('product_stock_movement'))
             ->drop()->update();
     }
 }
