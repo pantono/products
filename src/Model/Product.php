@@ -8,8 +8,10 @@ use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Products\Products;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Lazy;
+use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
-#[Locator(methodName: 'getProductById', className: Products::class)]
+#[Locator(methodName: 'getProductById', className: Products::class), DatabaseTable(table: 'product', idColumn: 'id')]
 class Product
 {
     use SavableModel;
@@ -17,9 +19,9 @@ class Product
     private ?int $id = null;
     private ?DateTimeInterface $dateCreated = null;
     private ?DateTimeInterface $dateUpdated = null;
-    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('draft_id'), Lazy]
+    #[OneToOne(targetModel: ProductVersion::class), FieldName('draft_id'), Lazy]
     private ?ProductVersion $draft = null;
-    #[Locator(methodName: 'getProductVersionById', className: Products::class), FieldName('published_draft_id'), Lazy]
+    #[OneToOne(targetModel: ProductVersion::class), FieldName('published_draft_id'), Lazy]
     private ?ProductVersion $publishedDraft = null;
     private string $code;
     private string $slug;

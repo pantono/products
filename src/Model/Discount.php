@@ -7,13 +7,17 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Discounts;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToMany;
 
+#[DatabaseTable(table: 'discount', idColumn: 'id')]
 class Discount
 {
     use SavableModel;
 
     private ?int $id = null;
-    #[FieldName('base_id'), Locator(methodName: 'getDiscountBaseById', className: Discounts::class)]
+    #[OneToOne(targetModel: DiscountBase::class)]
     private DiscountBase $base;
     private string $name;
     private ?float $amount = null;
@@ -27,7 +31,7 @@ class Discount
     /**
      * @var DiscountRule[]
      */
-    #[Locator(methodName: 'getRulesForDiscount', className: Discounts::class), FieldName('$this')]
+    #[OneToMany(targetModel: DiscountRule::class, mappedBy: 'discount_id')]
     private array $rules = [];
 
     public function getId(): ?int

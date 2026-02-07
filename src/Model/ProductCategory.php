@@ -7,6 +7,7 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Products\Categories;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
 #[Locator(methodName: 'getProductCategoryById', className: Products::class)]
 class ProductCategory
@@ -14,7 +15,7 @@ class ProductCategory
     use SavableModel;
 
     private ?int $id = null;
-    #[FieldName('category_id'), Locator(methodName: 'getCategoryById', className: Categories::class)]
+    #[OneToOne(targetModel: Category::class), FieldName('category_id')]
     private Category $category;
     private int $versionId;
     private int $displayOrder;

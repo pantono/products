@@ -2,6 +2,9 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Contracts\Attributes\DatabaseTable;
+
+#[DatabaseTable(table: 'discount_rule', idColumn: 'id')]
 class DiscountRule
 {
     private ?int $id = null;

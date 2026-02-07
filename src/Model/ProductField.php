@@ -2,16 +2,15 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Utilities\DateTimeParser;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
 class ProductField
 {
     private ?int $id = null;
     private int $productVersionId;
-    #[Locator(methodName: 'getFieldTypeById', className: Products::class), FieldName('type_id')]
+    #[OneToOne(targetModel: ProductFieldType::class), FieldName('type_id')]
     private ?ProductFieldType $type = null;
     private mixed $value;
 

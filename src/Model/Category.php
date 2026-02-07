@@ -4,16 +4,15 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Images\Model\Image;
 use Pantono\Contracts\Attributes\EagerLoad;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\Database\OneToMany;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getCategoryById', className: Categories::class), EagerLoad]
+#[DatabaseTable(table: 'category', idColumn: 'id'), EagerLoad]
 class Category
 {
     use SavableModel;

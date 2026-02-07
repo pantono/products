@@ -8,7 +8,7 @@ use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Application\Interfaces\SavableInterface;
 use Pantono\Database\Traits\SavableModel;
 
-#[Locator(methodName: 'getStatusById', className: Categories::class), DatabaseTable(table: 'category_status', idColumn: 'id')]
+#[DatabaseTable(table: 'category_status', idColumn: 'id')]
 class CategoryStatus implements SavableInterface
 {
     use SavableModel;

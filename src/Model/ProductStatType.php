@@ -2,6 +2,9 @@
 
 namespace Pantono\Products\Model;
 
+use Pantono\Contracts\Attributes\DatabaseTable;
+
+#[DatabaseTable(table: 'product_stat_type', idColumn: 'id')]
 class ProductStatType
 {
     private ?int $id = null;

@@ -4,8 +4,9 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Discounts;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getDiscountBaseById', className: Discounts::class)]
+#[Locator(methodName: 'getDiscountBaseById', className: Discounts::class), DatabaseTable(table: 'discount_base', idColumn: 'id')]
 class DiscountBase
 {
     private ?int $id = null;

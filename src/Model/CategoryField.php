@@ -2,17 +2,15 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Categories;
-use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Utilities\DateTimeParser;
 use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
 #[DatabaseTable(table: 'category_field', idColumn: 'id')]
 class CategoryField
 {
     private int $categoryId;
-    #[Locator(methodName: 'getFieldTypeById', className: Categories::class), FieldName('type_id')]
+    #[OneToOne(targetModel: CategoryFieldType::class)]
     private ?CategoryFieldType $type = null;
     private string $value;
 

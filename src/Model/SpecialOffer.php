@@ -6,13 +6,16 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Discounts;
+use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
+#[DatabaseTable(table: 'special_offer', idColumn: 'id')]
 class SpecialOffer
 {
     use SavableModel;
 
     private ?int $id = null;
-    #[FieldName('discount_id'), Locator(methodName: 'getDiscountById', className: Discounts::class)]
+    #[FieldName('discount_id'), OneToOne(targetModel: Discount::class)]
     private ?Discount $discount = null;
     private ?string $name = null;
     private \DateTimeInterface $startDate;

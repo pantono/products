@@ -13,8 +13,11 @@ use Pantono\Customers\Companies;
 use Pantono\Products\Discounts;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Contracts\Attributes\Lazy;
+use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\Database\OneToMany;
 
-#[Locator(methodName: 'getProductById', className: Products::class)]
+#[Locator(methodName: 'getProductById', className: Products::class), DatabaseTable(table: 'product_version', idColumn: 'id')]
 class ProductVersion
 {
     use SavableModel, DiffableTrait, FillableTrait;
@@ -23,13 +26,13 @@ class ProductVersion
     private int $productId;
     private \DateTimeImmutable $dateAdded;
     private \DateTimeImmutable $dateUpdated;
-    #[FieldName('type_id'), Locator(methodName: 'getProductTypeById', className: Products::class)]
+    #[FieldName('type_id'), OneToOne(targetModel: ProductType::class)]
     private ProductType $type;
     private string $title;
     private string $description;
-    #[FieldName('status_id'), Locator(methodName: 'getStatusById', className: Products::class)]
+    #[FieldName('status_id'), OneToOne(targetModel: ProductStatus::class)]
     private ProductStatus $status;
-    #[FieldName('vat_rate_id'), Locator(methodName: 'getVatRateById', className: Products::class)]
+    #[FieldName('vat_rate_id'), OneToOne(targetModel: ProductVatRate::class)]
     private ProductVatRate $vatRate;
     private float $weight;
     private int $itemsIncluded = 1;
@@ -38,23 +41,23 @@ class ProductVersion
     private ?string $metaTitle = null;
     private ?string $metaKeywords = null;
     private ?string $metaRobots = null;
-    #[Locator(methodName: 'getBrandById', className: Products::class), FieldName('brand_id')]
+    #[OneToOne(targetModel: ProductBrand::class), FieldName('brand_id')]
     private ?ProductBrand $brand = null;
-    #[Locator(methodName: 'getConditionById', className: Products::class), FieldName('condition_id')]
+    #[OneToOne(targetModel: ProductCondition::class), FieldName('condition_id')]
     private ?ProductCondition $condition = null;
     private float $price;
     private float $rrp;
-    #[FieldName('company_id'), Locator(methodName: 'getCompanyById', className: Companies::class), Lazy]
+    #[FieldName('company_id'), OneToOne(targetModel: Company::class)]
     private ?Company $company = null;
     /**
      * @var ProductImage[]
      */
-    #[Locator(methodName: 'getImagesForProduct', className: Products::class), FieldName('$this')]
+    #[OneToMany(targetModel: ProductImage::class, mappedBy: 'version_id'), FieldName('id')]
     private array $images = [];
     /**
      * @var ProductCategory[]
      */
-    #[Locator(methodName: 'getCategoriesForProduct', className: Products::class), FieldName('$this')]
+    #[OneToMany(targetModel: ProductCategory::class, mappedBy: 'version_id'), FieldName('id')]
     private array $categories = [];
     /**
      * @var ProductVersion[]

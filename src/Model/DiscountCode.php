@@ -4,14 +4,17 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
+#[DatabaseTable(table: 'discount_code', idColumn: 'id')]
 class DiscountCode
 {
     use SavableModel;
 
     private ?int $id = null;
     private string $code;
-    #[FieldName('discount_id')]
+    #[FieldName('discount_id'), OneToOne(targetModel: Discount::class)]
     private ?Discount $discount = null;
     private ?\DateTime $startDate = null;
     private ?\DateTime $endDate = null;

@@ -8,7 +8,9 @@ use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
+#[DatabaseTable(table: 'product_field_type', idColumn: 'id')]
 class ProductFieldType
 {
     use SavableModel;

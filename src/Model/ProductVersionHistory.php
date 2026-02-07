@@ -4,8 +4,9 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\ProductHistory;
+use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getHistoryById', className: ProductHistory::class)]
+#[DatabaseTable(table: 'product_version_history', idColumn: 'id')]
 class ProductVersionHistory
 {
     private ?int $id;

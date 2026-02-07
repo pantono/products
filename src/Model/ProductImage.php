@@ -9,15 +9,17 @@ use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 use Pantono\Images\Model\Image;
 use Pantono\Images\Images;
+use Pantono\Contracts\Attributes\DatabaseTable;
+use Pantono\Contracts\Attributes\Database\OneToOne;
 
-#[Locator(methodName: 'getProductImageBydId', className: Products::class)]
+#[Locator(methodName: 'getProductImageBydId', className: Products::class), DatabaseTable(table: 'product_image', idColumn: 'id')]
 class ProductImage
 {
     use SavableModel;
 
     private ?int $id = null;
     private int $versionId;
-    #[FieldName('image_id'), Locator(methodName: 'getImageById', className: Images::class)]
+    #[FieldName('image_id'), OneToOne(targetModel: Image::class)]
     private ?Image $image = null;
     private bool $mainImage;
     private bool $deleted = false;
