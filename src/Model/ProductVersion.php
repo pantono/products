@@ -35,7 +35,6 @@ class ProductVersion
     private ProductVatRate $vatRate;
     private float $weight;
     private int $itemsIncluded = 1;
-    private int $stockHolding;
     private ?string $metaDescription = null;
     private ?string $metaTitle = null;
     private ?string $metaKeywords = null;
@@ -189,16 +188,6 @@ class ProductVersion
     public function setItemsIncluded(int $itemsIncluded): void
     {
         $this->itemsIncluded = $itemsIncluded;
-    }
-
-    public function getStockHolding(): int
-    {
-        return $this->stockHolding;
-    }
-
-    public function setStockHolding(int $stockHolding): void
-    {
-        $this->stockHolding = $stockHolding;
     }
 
     public function getMetaDescription(): ?string

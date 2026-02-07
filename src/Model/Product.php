@@ -22,6 +22,7 @@ class Product
     private ?ProductVersion $draft = null;
     #[OneToOne(targetModel: ProductVersion::class), FieldName('published_draft_id'), Lazy]
     private ?ProductVersion $publishedDraft = null;
+    private int $stockHolding;
     private string $code;
     private string $slug;
 
@@ -63,6 +64,16 @@ class Product
     public function setDraft(?ProductVersion $draft): void
     {
         $this->draft = $draft;
+    }
+
+    public function getStockHolding(): int
+    {
+        return $this->stockHolding;
+    }
+
+    public function setStockHolding(int $stockHolding): void
+    {
+        $this->stockHolding = $stockHolding;
     }
 
     public function getPublishedDraft(): ?ProductVersion
