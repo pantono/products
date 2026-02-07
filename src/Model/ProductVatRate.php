@@ -2,11 +2,9 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getVatRateById', className: Products::class), DatabaseTable(table: 'product_vat_rate', idColumn: 'id')]
+#[DatabaseTable(table: 'product_vat_rate', idColumn: 'id')]
 class ProductVatRate
 {
     private ?int $id = null;

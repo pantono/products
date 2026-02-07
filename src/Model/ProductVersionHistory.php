@@ -2,8 +2,6 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\ProductHistory;
 use Pantono\Contracts\Attributes\DatabaseTable;
 
 #[DatabaseTable(table: 'product_version_history', idColumn: 'id')]

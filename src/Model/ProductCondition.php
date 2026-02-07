@@ -2,11 +2,9 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getConditionById', className: Products::class), DatabaseTable(table: 'product_condition', idColumn: 'id')]
+#[DatabaseTable(table: 'product_condition', idColumn: 'id')]
 class ProductCondition
 {
     private ?int $id = null;

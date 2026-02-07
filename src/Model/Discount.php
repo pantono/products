@@ -2,10 +2,6 @@
 
 namespace Pantono\Products\Model;
 
-use Crell\Serde\Attributes\Field;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Discounts;
-use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\DatabaseTable;

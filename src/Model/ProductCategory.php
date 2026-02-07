@@ -6,7 +6,6 @@ use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Products\Products;
 use Pantono\Database\Traits\SavableModel;
-use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 
 #[Locator(methodName: 'getProductCategoryById', className: Products::class)]

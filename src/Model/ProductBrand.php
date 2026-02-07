@@ -2,11 +2,9 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getBrandById', className: Products::class), DatabaseTable(table: 'product_brand', idColumn: 'id')]
+#[DatabaseTable(table: 'product_brand', idColumn: 'id')]
 class ProductBrand
 {
     private ?int $id = null;

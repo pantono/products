@@ -9,7 +9,6 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Customers\Model\Company;
 use Pantono\Core\Application\Traits\DiffableTrait;
 use Pantono\Hydrator\Traits\FillableTrait;
-use Pantono\Customers\Companies;
 use Pantono\Products\Discounts;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Contracts\Attributes\Lazy;
@@ -17,7 +16,7 @@ use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\Database\OneToMany;
 
-#[Locator(methodName: 'getProductById', className: Products::class), DatabaseTable(table: 'product_version', idColumn: 'id')]
+#[DatabaseTable(table: 'product_version', idColumn: 'id')]
 class ProductVersion
 {
     use SavableModel, DiffableTrait, FillableTrait;

@@ -4,11 +4,9 @@ namespace Pantono\Products\Model;
 
 use Pantono\Contracts\Attributes\Filter;
 use Pantono\Database\Traits\SavableModel;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\DatabaseTable;
 
-#[Locator(methodName: 'getFieldTypeById', className: Categories::class), DatabaseTable(table: 'category_field_type', idColumn: 'id')]
+#[DatabaseTable(table: 'category_field_type', idColumn: 'id')]
 class CategoryFieldType
 {
     use SavableModel;

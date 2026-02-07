@@ -2,17 +2,13 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Storage\Model\StoredFile;
 use Pantono\Contracts\Attributes\FieldName;
 use Pantono\Database\Traits\SavableModel;
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Products;
 use Pantono\Images\Model\Image;
-use Pantono\Images\Images;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 
-#[Locator(methodName: 'getProductImageBydId', className: Products::class), DatabaseTable(table: 'product_image', idColumn: 'id')]
+#[DatabaseTable(table: 'product_image', idColumn: 'id')]
 class ProductImage
 {
     use SavableModel;

@@ -2,8 +2,6 @@
 
 namespace Pantono\Products\Model;
 
-use Pantono\Contracts\Attributes\Locator;
-use Pantono\Products\Categories;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Application\Interfaces\SavableInterface;
 use Pantono\Database\Traits\SavableModel;
