@@ -10,8 +10,9 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\EagerLoad;
 
-#[Locator(methodName: 'getProductById', className: Products::class), DatabaseTable(table: 'product', idColumn: 'id')]
+#[Locator(methodName: 'getProductById', className: Products::class), DatabaseTable(table: 'product', idColumn: 'id'), EagerLoad]
 class Product
 {
     use SavableModel;
