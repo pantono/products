@@ -27,7 +27,7 @@ final class ProductStockMigration extends BasePantonoMigration
         $this->table($this->addTablePrefix('product_stock_movement'))
             ->addLinkedColumn('product_id', $this->addTablePrefix('product'), 'id')
             ->addLinkedColumn('user_id', $this->addTablePrefix('user'), 'id', ['null' => true])
-            ->addLinkedColumn('order_id', $this->addTablePrefix('order'), 'id', ['null' => true])
+            ->addColumn('order_id', 'integer')
             ->addColumn('date', 'datetime')
             ->addColumn('value', 'integer')
             ->addColumn('comments', 'text', ['null' => true])
