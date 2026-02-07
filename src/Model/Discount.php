@@ -6,6 +6,7 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToMany;
+use Pantono\Contracts\Attributes\FieldName;
 
 #[DatabaseTable(table: 'discount', idColumn: 'id')]
 class Discount
@@ -13,7 +14,7 @@ class Discount
     use SavableModel;
 
     private ?int $id = null;
-    #[OneToOne(targetModel: DiscountBase::class)]
+    #[OneToOne(targetModel: DiscountBase::class), FieldName('base_id')]
     private DiscountBase $base;
     private string $name;
     private ?float $amount = null;
