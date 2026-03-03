@@ -187,7 +187,7 @@ class ProductsRepository extends DefaultRepository
     public function getFlagsForProductVersion(ProductVersion $version): array
     {
         $select = $this->getDb()->select('f.*')->from($this->appendTablePrefix('product_flag'), 'pf')
-            ->innerJoin('f', $this->appendTablePrefix('flag'), 'f', 'pf.flat_id=f.id')
+            ->innerJoin('pf', $this->appendTablePrefix('flag'), 'f', 'pf.flat_id=f.id')
             ->where('pf.version_id=:version_id')
             ->setParameter('version_id', $version->getId());
 
