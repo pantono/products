@@ -131,7 +131,7 @@ class ProductsRepository extends DefaultRepository
             ->innerJoin('v', $this->appendTablePrefix('product_status'), 's', 's.id=v.status_id')
             ->where('s.archived=0')
             ->where('s.visible=1')
-            ->where('s.source_product=:product_id')
+            ->where('r.source_product=:product_id')
             ->setParameter('product_id', $productVersion->getId());
 
         return $this->getDb()->fetchAll($select);
