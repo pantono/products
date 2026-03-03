@@ -13,12 +13,12 @@ class CategoriesRepository extends DefaultRepository
 {
     public function getCategoryById(int $id): ?array
     {
-        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.id=:id')->setParameter('id', $id));
+        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('c.id=:id')->setParameter('id', $id));
     }
 
     public function getCategoryBySlug(string $slug): ?array
     {
-        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.slug=:slug')->setParameter('slug', $slug));
+        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('c.slug=:slug')->setParameter('slug', $slug));
     }
 
     public function saveCategory(Category $category): void
