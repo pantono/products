@@ -10,7 +10,7 @@ class ProductStatsRepository extends DefaultRepository
 {
     public function logStatForProduct(ProductVersion $version, ProductStatType $type, ?int $userId = null, \DateTimeInterface $date = new \DateTimeImmutable()): void
     {
-        $this->getDb()->insert('product_stat', [
+        $this->getDb()->insert($this->appendTablePrefix('product_stat'), [
             'date' => $date->format('Y-m-d H:i:s'),
             'type_id' => $type->getId(),
             'product_version_id' => $version->getId(),
@@ -20,12 +20,23 @@ class ProductStatsRepository extends DefaultRepository
 
     public function getStatTypById(int $id): ?array
     {
-        return $this->selectSingleRow('product_stat_type', 'id', $id);
+        return $this->selectSingleRow($this->appendTablePrefix('product_stat_type'), 'id', $id);
     }
 
     public function groupStats(ProductStatType $type, \DateTimeInterface $date): void
     {
         $this->getDb()->delete('product_stat_grouped', ['type_id' => $type->getId(), 'date' => $date->format('Y-m-d')]);
-        $this->getDb()->query('INSERT into product_stat_grouped (SELECT date(`date`), :type_id, product_version_id, product_id, COUNT(1) as cnt from product_stat where date(`date`)=:date and type_id=:type_id group by product_version_id)', ['type_id' => $type->getId(), 'date' => $date->format('Y-m-d')]);
+        $query = $this->getDb()->select(
+            'DATE(ps.date) AS date',
+            ':type_id AS type_id',
+            'ps.product_version_id',
+            'ps.product_id',
+            'COUNT(1) AS cnt'
+        )
+            ->from('product_stat', 'ps')
+            ->where('DATE(ps.date) = :date')
+            ->andWhere('ps.type_id = :type_id')
+            ->groupBy('ps.product_version_id');
+        $this->getDb()->query('INSERT into product_stat_grouped (' . $query->getSQL() . ')', ['type_id' => $type->getId(), 'date' => $date->format('Y-m-d')]);
     }
 }

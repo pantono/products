@@ -6,18 +6,19 @@ use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\Category;
 use Pantono\Products\Filter\CategoryFilter;
 use Pantono\Products\Model\CategoryFieldType;
-use Pantono\Database\Query\Select\Select;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class CategoriesRepository extends DefaultRepository
 {
     public function getCategoryById(int $id): ?array
     {
-        return $this->selectSingleRowFromQuery($this->getCategoryBaseSelect()->where('category.id=?', $id));
+        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.id=:id')->setParameter('id', $id));
     }
 
     public function getCategoryBySlug(string $slug): ?array
     {
-        return $this->selectSingleRowFromQuery($this->getCategoryBaseSelect()->where('category.slug=?', $slug));
+        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.slug=?', $slug));
     }
 
     public function saveCategory(Category $category): void
@@ -38,23 +39,33 @@ class CategoriesRepository extends DefaultRepository
         $select = $this->getCategoryBaseSelect();
 
         if ($filter->getSearch() !== null) {
-            $select->where('(category.title like ?', '%' . $filter->getSearch() . '%')
-                ->orWhere('category.description like ?)', '%' . $filter->getSearch() . '%');
+            $select->where('(c.title like :search or c.description like :search)')
+                ->setParameter('search', '%' . $filter->getSearch() . '%');
         }
         if ($filter->getParentId() === 0) {
-            $select->where('category.parent_id IS NULL');
+            $select->where('c.parent_id IS NULL');
         } elseif ($filter->getParentId() !== null) {
-            $select->where('category.parent_id=?', $filter->getParentId());
+            $select->where('c.parent_id=:parent_id')
+                ->setParameter('parent_id', $filter->getParentId());
         }
         if ($filter->getSlug() !== null) {
-            $select->where('category.slug=?', $filter->getSlug());
+            $select->where('c.slug=:slug')
+                ->setParameter('slug', $filter->getSlug());
         }
+        $paramIndex = 0;
         foreach ($filter->getColumns() as $column) {
-            $select->where($column['name'] . $column['operator'] . $column['placeholder'], $column['value']);
+            $placeholder = ':field_' . $paramIndex;
+            if ($column['operator'] === 'IN' || $column['operator'] === 'NOT IN') {
+                $select->where($column['name'] . $column['operator'] . '(' . $placeholder . ')')
+                    ->setParameter($placeholder, $column['value'], ArrayParameterType::STRING);
+            } else {
+                $select->where($column['name'] . $column['operator'] . $placeholder)
+                    ->setParameter($placeholder, $column['value']);
+            }
+            $paramIndex++;
         }
-        $filter->setTotalResults($this->getCount($select));
-        $select->limitPage($filter->getPage(), $filter->getPerPage());
-        $select->order($filter->getOrderBy());
+        $this->applyCountAndLimit($select, $filter);
+        $select->addOrderBy($filter->getOrderBy());
         return $this->getDb()->fetchAll($select);
     }
 
@@ -91,11 +102,11 @@ class CategoriesRepository extends DefaultRepository
         return $this->selectRowsByValues('category', ['parent_id' => $id]);
     }
 
-    private function getCategoryBaseSelect(): Select
+    private function getCategoryBaseSelect(): QueryBuilder
     {
-        return $this->getDb()->select()->from('category')
-            ->joinLeft(['parent' => 'category'], 'parent.id=category.parent_id', [])
-            ->joinLeft(['parent_parent' => 'category'], 'parent_parent.id=parent.parent_id', [])
-            ->joinLeft(['parent_parent_parent' => 'category'], 'parent_parent.parent_id=parent_parent_parent.id', ['CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title) as breadcrumb']);
+        return $this->getDb()->select('c.*', 'CONCAT_WS(\' -> \', parent_parent_parent.title, parent_parent.title, parent.title) as breadcrumb')->from('category', 'c')
+            ->leftJoin('c', 'category', 'parent', 'parent.id=c.parent_id')
+            ->leftJoin('parent', 'category', 'parent_parent', 'parent_parent.id=parent.parent_id')
+            ->leftJoin('parent_parent', 'category', 'parent_parent_parent', 'parent_parent_parent.id=parent_parent.parent_id');
     }
 }

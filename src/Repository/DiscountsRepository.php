@@ -13,32 +13,32 @@ class DiscountsRepository extends DefaultRepository
 {
     public function getDiscountBaseById(int $id): ?array
     {
-        return $this->selectSingleRow('discount_base', 'id', $id);
+        return $this->selectSingleRow($this->appendTablePrefix('discount_base'), 'id', $id);
     }
 
     public function getDiscountById(int $id): ?array
     {
-        return $this->selectSingleRow('discount', 'id', $id);
+        return $this->selectSingleRow($this->appendTablePrefix('discount'), 'id', $id);
     }
 
     public function getDiscountCodeById(int $id): ?array
     {
-        return $this->selectSingleRow('discount_code', 'id', $id);
+        return $this->selectSingleRow($this->appendTablePrefix('discount_code'), 'id', $id);
     }
 
     public function getDiscountCodeByCode(string $code): ?array
     {
-        return $this->selectSingleRow('discount_code', 'code', $code);
+        return $this->selectSingleRow($this->appendTablePrefix('discount_code'), 'code', $code);
     }
 
     public function getRulesForDiscount(Discount $discount): array
     {
-        return $this->selectRowsByValues('discount_rule', ['discount_id' => $discount->getId()]);
+        return $this->selectRowsByValues($this->appendTablePrefix('discount_rule'), ['discount_id' => $discount->getId()]);
     }
 
     public function saveDiscount(Discount $discount): void
     {
-        $id = $this->insertOrUpdateCheck('discount', 'id', $discount->getId(), $discount->getAllData());
+        $id = $this->insertOrUpdateCheck($this->appendTablePrefix('discount'), 'id', $discount->getId(), $discount->getAllData());
         if ($id) {
             $discount->setId($id);
         }
@@ -48,7 +48,7 @@ class DiscountsRepository extends DefaultRepository
         ];
         $ids = [];
         foreach ($discount->getRules() as $rule) {
-            $id = $this->insertOrUpdate('discount_rule', 'id', $rule->getId(), [
+            $id = $this->insertOrUpdate($this->appendTablePrefix('discount_rule'), 'id', $rule->getId(), [
                 'discount_id' => $discount->getId(),
                 'field' => $rule->getField(),
                 'value' => $rule->getValue(),
@@ -63,12 +63,12 @@ class DiscountsRepository extends DefaultRepository
         if (count($ids) > 0) {
             $params['id NOT IN (?)'] = $ids;
         }
-        $this->getDb()->delete('discount_rule', $params);
+        $this->getDb()->delete($this->appendTablePrefix('discount_rule'), $params);
     }
 
     public function saveDiscountCode(DiscountCode $code): void
     {
-        $id = $this->insertOrUpdateCheck('discount_code', 'id', $code->getId(), $code->getAllData());
+        $id = $this->insertOrUpdateCheck($this->appendTablePrefix('discount_code'), 'id', $code->getId(), $code->getAllData());
         if ($id) {
             $code->setId($id);
         }
@@ -76,7 +76,7 @@ class DiscountsRepository extends DefaultRepository
 
     public function logDiscountCodeUsed(Discount $discount, int $orderId): void
     {
-        $this->insert('discount_code_usage', [
+        $this->insert($this->appendTablePrefix('discount_code_usage'), [
             'discount_id' => $discount->getId(),
             'order_id' => $orderId,
             'date_used' => (new \DateTime())->format('Y-m-d H:i:s')
@@ -85,51 +85,52 @@ class DiscountsRepository extends DefaultRepository
 
     public function getSpecialOfferById(int $id): ?array
     {
-        return $this->selectSingleRow('special_offer', 'id', $id);
+        return $this->selectSingleRow($this->appendTablePrefix('special_offer'), 'id', $id);
     }
 
     public function getOffersByFilter(SpecialOfferFilter $filter): array
     {
-        $select = $this->getDb()->select()->from('special_offer');
+        $select = $this->getDb()->select('s.*')->from($this->appendTablePrefix('special_offer'), 's');
 
         if ($filter->getDiscount() !== null) {
-            $select->where('special_offer.discount_id=?', $filter->getDiscount()->getId());
+            $select->where('s.discount_id=:discount_id')
+                ->setParameter('discount_id', $filter->getDiscount()->getId());
         }
         if ($filter->getActive() !== null) {
-            $select->where('active=?', $filter->getActive() ? 1 : 0);
+            $select->where('s.active=:active')
+                ->setParameter('active', $filter->getActive() ? 1 : 0);
         }
         if ($filter->getStartDate() !== null) {
-            $select->where('(start_date <= ?', $filter->getStartDate()->format('Y-m-d H:i:s'))
-                ->where('end_date >= ?)', $filter->getStartDate()->format('Y-m-d H:i:s'));
+            $select->where('(s.start_date <= :start_date and s.end_date >= :start_date)')
+                ->setParameter('start_date', $filter->getStartDate()->format('Y-m-d H:i:s'));
         }
         if ($filter->getEndDate() !== null) {
-            $select->where('(start_date <= ?', $filter->getEndDate()->format('Y-m-d H:i:s'))
-                ->where('end_date >= ?)', $filter->getEndDate()->format('Y-m-d H:i:s'));
+            $select->where('(s.start_date <= :end_date and s.end_date >= :end_date)')
+                ->setParameter('end_date', $filter->getEndDate()->format('Y-m-d H:i:s'));
         }
 
-        $filter->setTotalResults($this->getCount($select));
-        $select->limitPage($filter->getPage(), $filter->getPerPage());
-
+        $this->applyCountAndLimit($select, $filter);
         return $this->getDb()->fetchAll($select);
     }
 
     public function getOffersForProductVersion(ProductVersion $version): array
     {
-        $select = $this->getDb()->select()->from('special_offer_product', [])
-            ->join('special_offer', 'special_offer.id=special_offer_product.special_offer_id')
-            ->where('special_offer_product.product_version_id=?', $version->getId());
+        $select = $this->getDb()->select('s.*')->from($this->appendTablePrefix('special_offer_product'), 'p')
+            ->innerJoin('p', 'special_offer', 's', 's.id=p.special_offer_id')
+            ->where('p.product_version_id=:product_version_id')
+            ->setParameter('product_version_id', $version->getId());
 
         return $this->getDb()->fetchAll($select);
     }
 
     public function clearProductsForOffer(SpecialOffer $offer): void
     {
-        $this->getDb()->delete('special_offer_product', ['special_offer_id=?' => $offer->getId()]);
+        $this->getDb()->delete($this->appendTablePrefix('special_offer_product'), ['special_offer_id=?' => $offer->getId()]);
     }
 
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
     {
-        $this->insertIgnore('special_offer_product', [
+        $this->insertIgnore($this->appendTablePrefix('special_offer_product'), [
             'product_version_id' => $version->getId(),
             'special_offer_id' => $offer->getId()
         ]);
@@ -137,7 +138,7 @@ class DiscountsRepository extends DefaultRepository
 
     public function saveSpecialOffer(SpecialOffer $offer): void
     {
-        $id = $this->insertOrUpdate('special_offer', 'id', $offer->getId(), $offer->getAllData());
+        $id = $this->insertOrUpdate($this->appendTablePrefix('special_offer'), 'id', $offer->getId(), $offer->getAllData());
         if ($id) {
             $offer->setId($id);
         }

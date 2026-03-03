@@ -265,6 +265,9 @@ class Products
 
     public function logStockMovement(Product $product, int $value, ?string $comments = null, ?int $orderId = null, ?User $user = null): ProductStockMovement
     {
+        if (!$product->getId()) {
+            throw new \RuntimeException('Product must be saved before stock movement can be logged');
+        }
         $movement = new ProductStockMovement();
         $movement->setProductId($product->getId());
         $movement->setDate(new \DateTime);
