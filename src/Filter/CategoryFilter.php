@@ -13,7 +13,7 @@ class CategoryFilter implements PageableInterface
     private ?string $slug = null;
     private ?string $search = null;
     private ?int $parentId = null;
-    private string $orderBy = 'parent.display_order,category.display_order';
+    private string $orderBy = 'parent.display_order,c.display_order';
 
     public function getSlug(): ?string
     {
