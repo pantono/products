@@ -132,7 +132,7 @@ class ProductsRepository extends DefaultRepository
             ->where('s.archived=0')
             ->where('s.visible=1')
             ->where('s.source_product=:product_id')
-            ->setParameter('product_id=?', $productVersion->getId());
+            ->setParameter('product_id', $productVersion->getId());
 
         return $this->getDb()->fetchAll($select);
     }
