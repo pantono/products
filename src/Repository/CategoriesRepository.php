@@ -18,7 +18,7 @@ class CategoriesRepository extends DefaultRepository
 
     public function getCategoryBySlug(string $slug): ?array
     {
-        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.slug=?', $slug));
+        return $this->getDb()->fetchRow($this->getCategoryBaseSelect()->where('category.slug=:slug')->setParameter('slug', $slug));
     }
 
     public function saveCategory(Category $category): void
