@@ -5,12 +5,13 @@ namespace Pantono\Products\Model;
 use Pantono\Utilities\DateTimeParser;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
+use Pantono\Contracts\Attributes\FieldName;
 
 #[DatabaseTable(table: 'category_field', idColumn: 'id')]
 class CategoryField
 {
     private int $categoryId;
-    #[OneToOne(targetModel: CategoryFieldType::class)]
+    #[OneToOne(targetModel: CategoryFieldType::class), FieldName('type_id')]
     private ?CategoryFieldType $type = null;
     private string $value;
 
