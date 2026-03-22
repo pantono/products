@@ -29,7 +29,7 @@ class CategoriesRepository extends DefaultRepository
         }
         $this->getDb()->delete('category_field', ['category_id' => $category->getId()]);
         foreach ($category->getFields() as $field) {
-            $this->insert('category_field', ['category_id' => $category->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
+            $this->getDb()->insert('category_field', ['category_id' => $category->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
         }
     }
 
