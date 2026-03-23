@@ -168,19 +168,19 @@ class Discount
             if ($rule->getOperand() === '=' && $value !== $rule->getValue()) {
                 $valid = false;
             }
-            if ($value->getOperand() === '<' && $value > $rule->getValue()) {
+            if ($rule->getOperand() === '<' && $value > $rule->getValue()) {
                 $valid = false;
             }
-            if ($value->getOperand() === '>' && $value < $rule->getValue()) {
+            if ($rule->getOperand() === '>' && $value < $rule->getValue()) {
                 $valid = false;
             }
-            if ($value->getOperand() === '<=' && $value >= $rule->getValue()) {
+            if ($rule->getOperand() === '<=' && $value >= $rule->getValue()) {
                 $valid = false;
             }
-            if ($value->getOperand() === '>=' && $value <= $rule->getValue()) {
+            if ($rule->getOperand() === '>=' && $value <= $rule->getValue()) {
                 $valid = false;
             }
-            if ($value->getOperand() === 'in' && !in_array($value, explode(',', $rule->getValue()))) {
+            if ($rule->getOperand() === 'in' && !in_array($value, explode(',', $rule->getValue()))) {
                 $valid = false;
             }
         }
