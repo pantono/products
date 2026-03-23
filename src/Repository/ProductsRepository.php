@@ -93,13 +93,17 @@ class ProductsRepository extends DefaultRepository
             $doneIds[] = $category->getId();
         }
 
-        $params = [
-            'version_id=?' => $version->getId()
-        ];
+        $deleteQb = $this->getDb()->createQueryBuilder()->delete($this->appendTablePrefix('product_category'))
+            ->where('version_id=:version_id')
+            ->setParameter('version_id', $version->getId());
+
+
         if (!empty($doneIds)) {
-            $params['id NOT IN (?)'] = $doneIds;
+            $deleteQb->where('id not in (:ids)')
+                ->setParameter('ids', $doneIds, ArrayParameterType::INTEGER);
         }
-        $this->getDb()->delete($this->appendTablePrefix('product_category'), $params);
+
+        $deleteQb->executeQuery();
     }
 
     private function saveFieldsForProduct(ProductVersion $version): void
