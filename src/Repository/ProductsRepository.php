@@ -117,7 +117,7 @@ class ProductsRepository extends DefaultRepository
         if (!$product->getId()) {
             throw new \RuntimeException('Product must be saved before saving images');
         }
-        $this->getDb()->delete($this->appendTablePrefix('product_image'), ['version_id=?' => $product->getId()]);
+        $this->getDb()->delete($this->appendTablePrefix('product_image'), ['version_id' => $product->getId()]);
         foreach ($product->getImages() as $image) {
             $image->setVersionId($product->getId());
             $this->getDb()->insert($this->appendTablePrefix('product_image'), $image->getAllData());
