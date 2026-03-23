@@ -108,7 +108,7 @@ class ProductsRepository extends DefaultRepository
 
     private function saveFieldsForProduct(ProductVersion $version): void
     {
-        $this->getDb()->delete($this->appendTablePrefix('product_field'), ['product_version_id=?' => $version->getId()]);
+        $this->getDb()->delete($this->appendTablePrefix('product_field'), ['product_version_id' => $version->getId()]);
         foreach ($version->getFields() as $field) {
             if ($field->getType()) {
                 $this->insert($this->appendTablePrefix('product_field'), ['product_version_id' => $version->getId(), 'type_id' => $field->getType()->getId(), 'value' => $field->getValue()]);
