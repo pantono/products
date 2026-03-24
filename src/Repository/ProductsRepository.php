@@ -94,12 +94,12 @@ class ProductsRepository extends DefaultRepository
         }
 
         $deleteQb = $this->getDb()->createQueryBuilder()->delete($this->appendTablePrefix('product_category'))
-            ->where('version_id=:version_id')
+            ->andWhere('version_id=:version_id')
             ->setParameter('version_id', $version->getId());
 
 
         if (!empty($doneIds)) {
-            $deleteQb->where('id not in (:ids)')
+            $deleteQb->andWhere('id not in (:ids)')
                 ->setParameter('ids', $doneIds, ArrayParameterType::INTEGER);
         }
 
