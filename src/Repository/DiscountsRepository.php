@@ -8,6 +8,7 @@ use Pantono\Products\Model\DiscountCode;
 use Pantono\Products\Filter\SpecialOfferFilter;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Model\SpecialOffer;
+use Doctrine\DBAL\ArrayParameterType;
 
 class DiscountsRepository extends DefaultRepository
 {
@@ -43,9 +44,9 @@ class DiscountsRepository extends DefaultRepository
             $discount->setId($id);
         }
 
-        $params = [
-            'discount_id=?' => $discount->getId()
-        ];
+        $deleteQb = $this->getDb()->createQueryBuilder()->delete($this->appendTablePrefix('discount_rule'))
+            ->andWhere('discount_id=:discount_id')
+            ->setParameter('discount_id', $discount->getId());
         $ids = [];
         foreach ($discount->getRules() as $rule) {
             $id = $this->insertOrUpdate($this->appendTablePrefix('discount_rule'), 'id', $rule->getId(), [
@@ -61,9 +62,10 @@ class DiscountsRepository extends DefaultRepository
             $ids[] = $rule->getId();
         }
         if (count($ids) > 0) {
-            $params['id NOT IN (?)'] = $ids;
+            $deleteQb->andWhere('id not in (:ids)')
+                ->setParameter('ids', $ids, ArrayParameterType::INTEGER);
         }
-        $this->getDb()->delete($this->appendTablePrefix('discount_rule'), $params);
+        $deleteQb->executeQuery();
     }
 
     public function saveDiscountCode(DiscountCode $code): void
@@ -125,7 +127,7 @@ class DiscountsRepository extends DefaultRepository
 
     public function clearProductsForOffer(SpecialOffer $offer): void
     {
-        $this->getDb()->delete($this->appendTablePrefix('special_offer_product'), ['special_offer_id=?' => $offer->getId()]);
+        $this->getDb()->delete($this->appendTablePrefix('special_offer_product'), ['special_offer_id' => $offer->getId()]);
     }
 
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
