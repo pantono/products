@@ -159,16 +159,16 @@ class ProductsRepository extends DefaultRepository
         }
 
         if ($filter->getSearch() !== null) {
-            $select->where('(published.title like :search or product.code like :search or published.description like :search)')
+            $select->andWhere('(published.title like :search or product.code like :search or published.description like :search)')
                 ->setParameter('search', '%' . $filter->getSearch() . '%');
         }
         if (!empty($filter->getCategoryIds())) {
             $select->innerJoin('published', 'product_category', 'c', 'c.version_id=published.id')
-                ->where('c.category_id in (:categories)')
+                ->andWhere('c.category_id in (:categories)')
                 ->setParameter('categories', $filter->getCategoryIds(), ArrayParameterType::INTEGER);
         }
         if ($filter->getStatus() !== null) {
-            $select->where('published.status_id=?')
+            $select->andWhere('published.status_id=:status')
                 ->setParameter('status', $filter->getStatus()->getId());
         }
         $paramIndex = 0;
@@ -176,11 +176,14 @@ class ProductsRepository extends DefaultRepository
             $operator = $column['operator'];
             $placeHolder = 'param_' . $paramIndex;
             $value = $column['value'];
-            if (($operator === 'IN' || $operator === 'NOT IN') && is_string($value)) {
-                $select->where($column['name'] . ' ' . $operator . ' (:' . $placeHolder . ')')
+            if ($operator === 'IN' || $operator === 'NOT IN') {
+                if (is_string($value)) {
+                    $value = explode(',', $value);
+                }
+                $select->andWhere($column['name'] . ' ' . $operator . ' (:' . $placeHolder . ')')
                     ->setParameter($placeHolder, $value, ArrayParameterType::STRING);
             } else {
-                $select->where($column['name'] . ' ' . $operator . ' :' . $placeHolder)
+                $select->andWhere($column['name'] . ' ' . $operator . ' :' . $placeHolder)
                     ->setParameter($placeHolder, $value);
             }
             $paramIndex++;
