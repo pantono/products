@@ -12,7 +12,7 @@ class ProductField
     private int $productVersionId;
     #[OneToOne(targetModel: ProductFieldType::class), FieldName('type_id')]
     private ?ProductFieldType $type = null;
-    private mixed $value;
+    private string $value;
 
     public function getId(): ?int
     {
@@ -44,12 +44,12 @@ class ProductField
         $this->type = $type;
     }
 
-    public function getValue(): mixed
+    public function getValue(): string
     {
         return $this->value;
     }
 
-    public function setValue(mixed $value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
