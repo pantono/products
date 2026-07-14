@@ -269,4 +269,9 @@ class ProductsRepository extends DefaultRepository
     {
         return $this->selectAll($this->appendTablePrefix('product_status'));
     }
+
+    public function getFieldTypeByName(string $name): ?array
+    {
+        return $this->selectSingleRow('product_field_type', 'name', $name);
+    }
 }

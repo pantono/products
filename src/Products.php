@@ -183,11 +183,17 @@ class Products
         return $this->hydrator->hydrateSet(Product::class, $this->repository->getProductsByFilter($filter));
     }
 
-
     public function getFieldTypeById(int $id): ?ProductFieldType
     {
         return $this->hydrator->hydrateCached('product_field_type_' . $id, ProductFieldType::class, function () use ($id) {
             return $this->repository->getFieldTypeById($id);
+        });
+    }
+
+    public function getFieldTypeByName(string $name): ?ProductFieldType
+    {
+        return $this->hydrator->hydrateCached('product_field_type_name_' . $name, ProductFieldType::class, function () use ($name) {
+            return $this->repository->getFieldTypeByName($name);
         });
     }
 
