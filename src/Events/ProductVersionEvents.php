@@ -44,6 +44,9 @@ class ProductVersionEvents implements EventSubscriberInterface
             $name = StringUtilities::camelCaseToWords($field);
             $old = $info['old'] ?: 'N/A';
             $new = $info['new'] ?: 'N/A';
+            if (is_array($old) || is_array($new)) {
+                continue;
+            }
             if (!StringUtilities::isStringable($old)) {
                 if (is_object($old) && method_exists($old, 'getId')) {
                     $old = $old->getId();
