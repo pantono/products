@@ -22,7 +22,7 @@ class ProductVersion
     use SavableModel, DiffableTrait, FillableTrait;
 
     private ?int $id = null;
-    private int $productId;
+    private ?int $productId = null;
     private \DateTimeImmutable $dateAdded;
     private \DateTimeImmutable $dateUpdated;
     #[FieldName('type_id'), OneToOne(targetModel: ProductType::class)]
@@ -90,12 +90,12 @@ class ProductVersion
         $this->id = $id;
     }
 
-    public function getProductId(): int
+    public function getProductId(): ?int
     {
         return $this->productId;
     }
 
-    public function setProductId(int $productId): void
+    public function setProductId(?int $productId): void
     {
         $this->productId = $productId;
     }
