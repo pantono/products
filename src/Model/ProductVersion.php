@@ -390,7 +390,7 @@ class ProductVersion
     {
         $fields = [];
         foreach ($this->getFields() as $field) {
-            $fields[$field->getType()->getName()] = $field->getValue();
+            $fields[$field->getType()->getName()] = $field->getCastedValue();
         }
         $images = [];
         foreach ($this->getImages() as $image) {
