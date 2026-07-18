@@ -385,4 +385,37 @@ class ProductVersion
     {
         return !empty($this->getActiveOffers());
     }
+
+    public function toArray(): array
+    {
+        $fields = [];
+        foreach ($this->getFields() as $field) {
+            $fields[$field->getType()->getName()] = $field->getValue();
+        }
+        $images = [];
+        foreach ($this->getImages() as $image) {
+            $images[] = $image->getImage()->getFile()->getUri();
+        }
+        return [
+            'product_id' => $this->getProductId(),
+            'type' => $this->getType()->getName(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'status' => $this->getStatus()->getName(),
+            'vat_rate' => $this->getVatRate()->getName(),
+            'weight' => $this->getWeight(),
+            'items_included' => $this->getItemsIncluded(),
+            'meta_description' => $this->getMetaDescription(),
+            'meta_title' => $this->getMetaTitle(),
+            'meta_keywords' => $this->getMetaKeywords(),
+            'meta_robots' => $this->getMetaRobots(),
+            'brand' => $this->getBrand()?->getName(),
+            'condition' => $this->getCondition()?->getName(),
+            'price' => $this->getPrice(),
+            'rrp' => $this->getRrp(),
+            'company' => $this->getCompany()?->getName(),
+            'fields' => $fields,
+            'images' => $images
+        ];
+    }
 }
