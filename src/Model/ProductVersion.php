@@ -15,6 +15,7 @@ use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\Database\OneToMany;
+use Pantono\Utilities\StringUtilities;
 
 #[DatabaseTable(table: 'product_version', idColumn: 'id')]
 class ProductVersion
@@ -389,18 +390,18 @@ class ProductVersion
     public function toArray(): array
     {
         $data = [
-            'product_id' => $this->getProductId(),
+            'productId' => $this->getProductId(),
             'type' => $this->getType()->getName(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'status' => $this->getStatus()->getName(),
-            'vat_rate' => $this->getVatRate()->getName(),
+            'vatRate' => $this->getVatRate()->getName(),
             'weight' => $this->getWeight(),
-            'items_included' => $this->getItemsIncluded(),
-            'meta_description' => $this->getMetaDescription(),
-            'meta_title' => $this->getMetaTitle(),
-            'meta_keywords' => $this->getMetaKeywords(),
-            'meta_robots' => $this->getMetaRobots(),
+            'itemsIncluded' => $this->getItemsIncluded(),
+            'metaDescription' => $this->getMetaDescription(),
+            'metaTitle' => $this->getMetaTitle(),
+            'metaKeywords' => $this->getMetaKeywords(),
+            'metaRobots' => $this->getMetaRobots(),
             'brand' => $this->getBrand()?->getName(),
             'condition' => $this->getCondition()?->getName(),
             'price' => $this->getPrice(),
@@ -408,7 +409,11 @@ class ProductVersion
             'company' => $this->getCompany()?->getName(),
         ];
         foreach ($this->getFields() as $field) {
-            $data['field_' . $field->getType()->getName()] = $field->getCastedValue();
+            $name = $field->getType()->getName();
+            $name = str_replace('_', ' ', $name);
+            $name = ucwords($name);
+            $name = StringUtilities::camelCase($name);
+            $data[$name] = $field->getCastedValue();
         }
         foreach ($this->getImages() as $index => $image) {
             $data['image_' . ($index + 1)] = $image->getImage()->getFile()->getOriginalFilename();
