@@ -388,15 +388,7 @@ class ProductVersion
 
     public function toArray(): array
     {
-        $fields = [];
-        foreach ($this->getFields() as $field) {
-            $fields[$field->getType()->getName()] = $field->getCastedValue();
-        }
-        $images = [];
-        foreach ($this->getImages() as $image) {
-            $images[] = $image->getImage()->getFile()->getUri();
-        }
-        return [
+        $data = [
             'product_id' => $this->getProductId(),
             'type' => $this->getType()->getName(),
             'title' => $this->getTitle(),
@@ -414,8 +406,16 @@ class ProductVersion
             'price' => $this->getPrice(),
             'rrp' => $this->getRrp(),
             'company' => $this->getCompany()?->getName(),
-            'fields' => $fields,
-            'images' => $images
         ];
+        foreach ($this->getFields() as $field) {
+            $data['field_' . $field->getType()->getName()] = $field->getCastedValue();
+        }
+        foreach ($this->getImages() as $index => $image) {
+            $data['image_' . ($index + 1)] = $image->getImage()->getFile()->getOriginalFilename();
+            if ($image->isMainImage()) {
+                $data['main_image'] = $image->getImage()->getFile()->getOriginalFilename();
+            }
+        }
+        return $data;
     }
 }
