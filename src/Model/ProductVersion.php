@@ -382,6 +382,16 @@ class ProductVersion
         $this->fields[] = $field;
     }
 
+    public function getFieldValueByName(string $name): mixed
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getType()->getName() === $name) {
+                return $field->getCastedValue();
+            }
+        }
+        return null;
+    }
+
     public function isOnOffer(): bool
     {
         return !empty($this->getActiveOffers());
