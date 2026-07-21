@@ -153,7 +153,7 @@ class ProductsRepository extends DefaultRepository
     {
         $select = $this->getDb()->select('p.*')->from('product', 'p')
             ->leftJoin('p', 'product_version', 'published', 'published.id=p.published_draft_id')
-            ->leftJoin('p', 'product_version', 'draft', 'draft.id=p.draft_draft_id');
+            ->leftJoin('p', 'product_version', 'draft', 'draft.id=p.draft_id');
 
         if ($filter->getOrderBy()) {
             $select->addOrderBy($filter->getOrderBy());
