@@ -6,6 +6,7 @@ use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Authentication\Model\User;
 use Pantono\Products\Filter\ProductHistoryFilter;
+use Pantono\Products\Model\Product;
 
 class ProductHistoryRepository extends DefaultRepository
 {
@@ -13,6 +14,16 @@ class ProductHistoryRepository extends DefaultRepository
     {
         $this->getDb()->insert($this->appendTablePrefix('product_version_history'), [
             'product_version_id' => $version->getId(),
+            'user_id' => $user->getId(),
+            'date' => (new \DateTime)->format('Y-m-d H:i:s'),
+            'entry' => $entry
+        ]);
+    }
+
+    public function saveHistoryForProduct(Product $product, User $user, string $entry): void
+    {
+        $this->getDb()->insert($this->appendTablePrefix('product_history'), [
+            'product_id' => $product->getId(),
             'user_id' => $user->getId(),
             'date' => (new \DateTime)->format('Y-m-d H:i:s'),
             'entry' => $entry

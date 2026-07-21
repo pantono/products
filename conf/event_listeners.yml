@@ -1,5 +1,7 @@
-ProductEvents:
+ProductVersionEvents:
   class: Pantono\Products\Events\ProductVersionEvents
+ProductEvents:
+  class: Pantono\Products\Events\ProductEvents
 CategoryEvents:
   class: Pantono\Products\Events\CategoryEvents
 SpecialOfferEvents:

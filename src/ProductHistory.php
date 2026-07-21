@@ -8,6 +8,7 @@ use Pantono\Authentication\Model\User;
 use Pantono\Products\Filter\ProductHistoryFilter;
 use Pantono\Hydrator\Hydrator;
 use Pantono\Products\Model\ProductVersionHistory;
+use Pantono\Products\Model\Product;
 
 class ProductHistory
 {
@@ -23,6 +24,11 @@ class ProductHistory
     public function addHistoryToProductVersion(ProductVersion $version, User $user, string $entry): void
     {
         $this->repository->saveHistoryForVersion($version, $user, $entry);
+    }
+
+    public function addHistoryToProduct(Product $product, User $user, string $entry): void
+    {
+        $this->repository->saveHistoryForProduct($product, $user, $entry);
     }
 
     /**

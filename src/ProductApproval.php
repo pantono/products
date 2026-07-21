@@ -2,7 +2,6 @@
 
 namespace Pantono\Products;
 
-use Pantono\Products\Model\Product;
 use Pantono\Products\Model\ProductVersion;
 
 class ProductApproval
@@ -26,6 +25,9 @@ class ProductApproval
         if (!$status) {
             throw new \RuntimeException('Approved status does not exist');
         }
+        if (!$version->getProductId()) {
+            throw new \RuntimeException('Product does not exist');
+        }
         $product = $this->products->getProductById($version->getProductId());
         if (!$product) {
             throw new \RuntimeException('Product does not exist');
@@ -33,6 +35,7 @@ class ProductApproval
         $version->setStatus($status);
         $this->products->saveProductVersion($version);
         $product->setPublishedDraft($version);
+        $product->setDraft(null);
         $this->products->saveProduct($product);
     }
 
@@ -41,6 +44,9 @@ class ProductApproval
         $status = $this->products->getStatusById(self::STATUS_DECLINED);
         if (!$status) {
             throw new \RuntimeException('Declined status does not exist');
+        }
+        if (!$version->getProductId()) {
+            throw new \RuntimeException('Product does not exist');
         }
         $product = $this->products->getProductById($version->getProductId());
         if (!$product) {
