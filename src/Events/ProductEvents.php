@@ -28,7 +28,7 @@ class ProductEvents implements EventSubscriberInterface
         ];
     }
 
-    public function saveProductVersionHistory(PostProductSaveEvent $event): void
+    public function saveProductHistory(PostProductSaveEvent $event): void
     {
         if (!$event->getPrevious()) {
             $this->logHistory($event->getCurrent(), 'Created new product');
