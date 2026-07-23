@@ -9,6 +9,7 @@ use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\EagerLoad;
+use Pantono\Contracts\Attributes\Database\OneToMany;
 
 #[DatabaseTable(table: 'product', idColumn: 'id'), EagerLoad]
 class Product
@@ -25,6 +26,11 @@ class Product
     private int $stockHolding;
     private string $code;
     private string $slug;
+    /**
+     * @var ProductVersion[]
+     */
+    #[OneToMany(targetModel: ProductVersion::class, mappedBy: 'product_id'), FieldName('id'), Lazy]
+    private array $allVersions = [];
 
     public function getId(): ?int
     {
@@ -104,5 +110,15 @@ class Product
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
+    }
+
+    public function getAllVersions(): array
+    {
+        return $this->allVersions;
+    }
+
+    public function setAllVersions(array $allVersions): void
+    {
+        $this->allVersions = $allVersions;
     }
 }
