@@ -376,6 +376,12 @@ class ProductVersion
 
     public function addFieldByType(ProductFieldType $type, mixed $value): void
     {
+        foreach ($this->getFields() as $field) {
+            if ($field->getType()->getId() === $type->getId()) {
+                $field->setValue($value);
+                return;
+            }
+        }
         $field = new ProductField();
         $field->setType($type);
         $field->setValue($value);
