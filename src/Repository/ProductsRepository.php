@@ -162,7 +162,7 @@ class ProductsRepository extends DefaultRepository
         }
 
         if ($filter->getSearch() !== null) {
-            $select->andWhere('(published.title like :search or product.code like :search or published.description like :search)')
+            $select->andWhere('(published.title like :search or p.code like :search or published.description like :search)')
                 ->setParameter('search', '%' . $filter->getSearch() . '%');
         }
         if (!empty($filter->getCategoryIds())) {
