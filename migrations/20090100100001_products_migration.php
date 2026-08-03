@@ -30,7 +30,7 @@ final class ProductsMigration extends AbstractMigration
             ->insert([
                 ['id' => 1, 'name' => 'Draft', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => false, 'editable' => true],
                 ['id' => 2, 'name' => 'Awaiting Approval', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => false],
-                ['id' => 3, 'name' => 'Approved', 'visible' => true, 'purchasable' => true, 'archived' => false, 'in_review' => true, 'editable' => false],
+                ['id' => 3, 'name' => 'Approved', 'visible' => true, 'purchasable' => true, 'archived' => false, 'in_review' => false, 'editable' => false],
                 ['id' => 4, 'name' => 'Amendments Required', 'visible' => false, 'purchasable' => false, 'archived' => false, 'in_review' => true, 'editable' => true],
                 ['id' => 5, 'name' => 'Archived', 'visible' => false, 'purchasable' => false, 'archived' => true, 'in_review' => false, 'editable' => false],
             ])->saveData();
