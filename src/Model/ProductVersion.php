@@ -83,6 +83,7 @@ class ProductVersion
     private array $fields = [];
     #[ManyToOne(targetModel: Product::class, inversedBy: 'id'), FieldName('product_id'), Lazy]
     private ?Product $parentProduct = null;
+    private ?float $deliveryPrice = null;
 
     public function getId(): ?int
     {
@@ -362,6 +363,16 @@ class ProductVersion
     public function setParentProduct(?Product $parentProduct): void
     {
         $this->parentProduct = $parentProduct;
+    }
+
+    public function getDeliveryPrice(): ?float
+    {
+        return $this->deliveryPrice;
+    }
+
+    public function setDeliveryPrice(?float $deliveryPrice): void
+    {
+        $this->deliveryPrice = $deliveryPrice;
     }
 
     public function getPriceBreakdown(): ProductPrice
