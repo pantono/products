@@ -8,3 +8,5 @@ ProductHistory:
   class: Pantono\Products\ProductHistory
 Discounts:
   class: Pantono\Products\Discounts
+Reviews:
+  class: Pantono\Products\Reviews
