@@ -16,7 +16,6 @@ use Pantono\Contracts\Attributes\DatabaseTable;
 use Pantono\Contracts\Attributes\Database\OneToOne;
 use Pantono\Contracts\Attributes\Database\OneToMany;
 use Pantono\Utilities\StringUtilities;
-use Pantono\Contracts\Attributes\Database\ManyToOne;
 
 #[DatabaseTable(table: 'product_version', idColumn: 'id')]
 class ProductVersion
@@ -81,7 +80,7 @@ class ProductVersion
      */
     #[Locator(methodName: 'getFieldsForProductVersion', className: Products::class), FieldName('$this')]
     private array $fields = [];
-    #[ManyToOne(targetModel: Product::class, inversedBy: 'id'), FieldName('product_id'), Lazy]
+    #[OneToOne(targetModel: Product::class), FieldName('product_id'), Lazy]
     private ?Product $parentProduct = null;
     private ?float $deliveryPrice = null;
 
