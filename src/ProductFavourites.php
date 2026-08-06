@@ -4,13 +4,13 @@ namespace Pantono\Products;
 
 use Pantono\Products\Repository\ProductFavouritesRepository;
 use Pantono\Hydrator\Hydrator;
-use League\Container\Event\EventDispatcher;
 use Pantono\Products\Model\Product;
 use Pantono\Authentication\Model\User;
 use Pantono\Products\Model\ProductFavourite;
 use Pantono\Products\Event\PreProductFavouriteSaveEvent;
 use Pantono\Products\Event\PostProductFavouriteSaveEvent;
 use Pantono\Products\Filter\ProductFavouriteFilter;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ProductFavourites
 {
