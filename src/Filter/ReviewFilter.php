@@ -16,6 +16,8 @@ class ReviewFilter implements PageableInterface
     private ?\DateTimeInterface $dateCreatedStart = null;
     private ?\DateTimeInterface $dateCreatedEnd = null;
     private ?User $user = null;
+    private string $orderColumn = 'date_created';
+    private string $orderDirection = 'DESC';
 
     public function getProduct(): ?Product
     {
@@ -65,5 +67,31 @@ class ReviewFilter implements PageableInterface
     public function setUser(?User $user): void
     {
         $this->user = $user;
+    }
+
+    public function getOrderColumn(): string
+    {
+        return $this->orderColumn;
+    }
+
+    public function setOrderColumn(string $orderColumn): void
+    {
+        if (!in_array(strtolower($orderColumn), ['date_created', 'user', 'approved', 'rating'])) {
+            throw new \InvalidArgumentException('Invalid order column');
+        }
+        $this->orderColumn = $orderColumn;
+    }
+
+    public function getOrderDirection(): string
+    {
+        return $this->orderDirection;
+    }
+
+    public function setOrderDirection(string $orderDirection): void
+    {
+        if (strtolower($orderDirection) !== 'asc' && strtolower($orderDirection) !== 'desc') {
+            throw new \InvalidArgumentException('Invalid order direction');
+        }
+        $this->orderDirection = $orderDirection;
     }
 }
