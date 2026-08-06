@@ -9,9 +9,9 @@ class ProductReviewsRepository extends DefaultRepository
 {
     public function getReviewsByFilter(ReviewFilter $filter): array
     {
-        $select = $this->getDb()->select('r.*')->from('review', 'r')
+        $select = $this->getDb()->select('r.*')->from('product_review', 'r')
             ->orderBy($filter->getOrderColumn(), $filter->getOrderDirection());
-        
+
         if ($filter->getProduct() !== null) {
             $select->andWhere('r.product_id = :product_id')
                 ->setParameter('product_id', $filter->getProduct()->getId());
