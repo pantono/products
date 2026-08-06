@@ -28,6 +28,7 @@ class ProductFavourites
     public function addUserFavourite(Product $product, User $user): ProductFavourite
     {
         $favourite = new ProductFavourite();
+        $favourite->setDateCreated(new \DateTime);
         $favourite->setProduct($product);
         $favourite->setUser($user);
         $this->saveFavourite($favourite);
