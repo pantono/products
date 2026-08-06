@@ -6,3 +6,5 @@ CategoryEvents:
   class: Pantono\Products\Events\CategoryEvents
 SpecialOfferEvents:
   class: Pantono\Products\Events\SpecialOfferEvents
+ProductReviewEvents:
+  class: Pantono\Products\Events\ProductReviewEvents
