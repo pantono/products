@@ -5,6 +5,8 @@ namespace Pantono\Products\Repository;
 use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Filter\ProductFavouriteFilter;
 use Pantono\Database\Query\PantonoQueryBuilder;
+use Pantono\Products\Model\Product;
+use Pantono\Authentication\Model\User;
 
 class ProductFavouritesRepository extends DefaultRepository
 {
@@ -57,5 +59,10 @@ class ProductFavouritesRepository extends DefaultRepository
             $select->where('f.deleted = :deleted')
                 ->setParameter('deleted', $filter->getDeleted() ? 1 : 0);
         }
+    }
+
+    public function getFavouriteForUserAndProduct(User $user, Product $product): ?array
+    {
+        return $this->selectRowByValues($this->pt('product_favourite'), ['product_id' => $product->getId(), 'user_id' => $user->getId()]);
     }
 }

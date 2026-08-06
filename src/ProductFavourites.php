@@ -47,6 +47,11 @@ class ProductFavourites
         return $this->repository->getFavouriteCountByFilter($filter);
     }
 
+    public function getFavouriteForUserAndProduct(User $user, Product $product): ?ProductFavourite
+    {
+        return $this->hydrator->lookupRecord(ProductFavourite::class, $this->repository->getFavouriteForUserAndProduct($user, $product));
+    }
+
     public function saveFavourite(ProductFavourite $favourite): void
     {
         $previous = $favourite->getId() ? $this->hydrator->lookupRecord(ProductFavourite::class, $favourite->getId()) : null;
