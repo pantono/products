@@ -50,7 +50,7 @@ class ProductFavourites
 
     public function getFavouriteForUserAndProduct(User $user, Product $product): ?ProductFavourite
     {
-        return $this->hydrator->lookupRecord(ProductFavourite::class, $this->repository->getFavouriteForUserAndProduct($user, $product));
+        return $this->hydrator->hydrate(ProductFavourite::class, $this->repository->getFavouriteForUserAndProduct($user, $product));
     }
 
     public function saveFavourite(ProductFavourite $favourite): void
