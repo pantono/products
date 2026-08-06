@@ -8,16 +8,16 @@ use Pantono\Products\ProductHistory;
 use Pantono\Contracts\Security\SecurityContextInterface;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Utilities\StringUtilities;
-use Pantono\Products\Discounts;
+use Pantono\Products\ProductDiscounts;
 use Pantono\Products\Filter\SpecialOfferFilter;
 use Pantono\Products\Event\PostDiscountSaveEvent;
 use Pantono\Products\Event\PostSpecialOfferSaveEvent;
 
 class SpecialOfferEvents implements EventSubscriberInterface
 {
-    private Discounts $discounts;
+    private ProductDiscounts $discounts;
 
-    public function __construct(Discounts $discounts)
+    public function __construct(ProductDiscounts $discounts)
     {
         $this->discounts = $discounts;
     }

@@ -5,18 +5,18 @@ namespace Pantono\Products;
 use Pantono\Hydrator\Hydrator;
 use Pantono\Products\Model\ProductReview;
 use Pantono\Products\Event\PreReviewSaveEvent;
-use Pantono\Products\Repository\ReviewsRepository;
+use Pantono\Products\Repository\ProductReviewsRepository;
 use Pantono\Products\Event\PostReviewSaveEvent;
 use Pantono\Products\Filter\ReviewFilter;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Reviews
+class ProductReviews
 {
     private Hydrator $hydrator;
     private EventDispatcher $dispatcher;
-    private ReviewsRepository $repository;
+    private ProductReviewsRepository $repository;
 
-    public function __construct(Hydrator $hydrator, EventDispatcher $dispatcher, ReviewsRepository $repository)
+    public function __construct(Hydrator $hydrator, EventDispatcher $dispatcher, ProductReviewsRepository $repository)
     {
         $this->hydrator = $hydrator;
         $this->dispatcher = $dispatcher;

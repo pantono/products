@@ -9,7 +9,7 @@ use Pantono\Database\Traits\SavableModel;
 use Pantono\Customers\Model\Company;
 use Pantono\Core\Application\Traits\DiffableTrait;
 use Pantono\Hydrator\Traits\FillableTrait;
-use Pantono\Products\Discounts;
+use Pantono\Products\ProductDiscounts;
 use Pantono\Contracts\Attributes\NoSave;
 use Pantono\Contracts\Attributes\Lazy;
 use Pantono\Contracts\Attributes\DatabaseTable;
@@ -71,7 +71,7 @@ class ProductVersion
     /**
      * @var SpecialOffer[]
      */
-    #[Locator(methodName: 'getOffersForProductVersion', className: Discounts::class), FieldName('$this'), Lazy]
+    #[Locator(methodName: 'getOffersForProductVersion', className: ProductDiscounts::class), FieldName('$this'), Lazy]
     private array $offers = [];
     #[NoSave]
     private ?ProductPrice $priceBreakdown = null;

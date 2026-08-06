@@ -6,7 +6,9 @@ ProductApproval:
   class: Pantono\Products\ProductApproval
 ProductHistory:
   class: Pantono\Products\ProductHistory
-Discounts:
-  class: Pantono\Products\Discounts
-Reviews:
-  class: Pantono\Products\Reviews
+ProductDiscounts:
+  class: Pantono\Products\ProductDiscounts
+ProductReviews:
+  class: Pantono\Products\ProductReviews
+ProductFavourites:
+  class: Pantono\Products\ProductFavourites

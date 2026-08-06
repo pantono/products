@@ -21,7 +21,7 @@ use Pantono\Products\Model\ProductStatus;
 use Pantono\Products\Event\PreSpecialOfferSaveEvent;
 use Pantono\Products\Event\PostSpecialOfferSaveEvent;
 
-class Discounts
+class ProductDiscounts
 {
     private DiscountsRepository $repository;
     private Hydrator $hydrator;

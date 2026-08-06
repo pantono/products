@@ -5,7 +5,7 @@ namespace Pantono\Products\Repository;
 use Pantono\Database\Repository\DefaultRepository;
 use Pantono\Products\Filter\ReviewFilter;
 
-class ReviewsRepository extends DefaultRepository
+class ProductReviewsRepository extends DefaultRepository
 {
     public function getReviewsByFilter(ReviewFilter $filter): array
     {
