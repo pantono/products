@@ -3,12 +3,12 @@
 namespace Pantono\Products;
 
 use Pantono\Hydrator\Hydrator;
-use League\Container\Event\EventDispatcher;
 use Pantono\Products\Model\ProductReview;
 use Pantono\Products\Event\PreReviewSaveEvent;
 use Pantono\Products\Repository\ReviewsRepository;
 use Pantono\Products\Event\PostReviewSaveEvent;
 use Pantono\Products\Filter\ReviewFilter;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Reviews
 {
