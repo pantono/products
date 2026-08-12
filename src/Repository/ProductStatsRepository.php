@@ -14,6 +14,7 @@ class ProductStatsRepository extends DefaultRepository
             'date' => $date->format('Y-m-d H:i:s'),
             'type_id' => $type->getId(),
             'product_version_id' => $version->getId(),
+            'product_id' => $version->getProductId(),
             'user_id' => $userId,
         ]);
     }
