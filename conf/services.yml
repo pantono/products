@@ -12,3 +12,5 @@ ProductReviews:
   class: Pantono\Products\ProductReviews
 ProductFavourites:
   class: Pantono\Products\ProductFavourites
+ProductStats:
+  class: Pantono\Products\ProductStats
