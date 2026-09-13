@@ -19,6 +19,7 @@ class ProductImage
     private ?Image $image = null;
     private bool $mainImage;
     private bool $deleted = false;
+    private ?int $displayOrder = null;
 
     public function getId(): ?int
     {
@@ -68,5 +69,15 @@ class ProductImage
     public function setDeleted(bool $deleted): void
     {
         $this->deleted = $deleted;
+    }
+
+    public function getDisplayOrder(): ?int
+    {
+        return $this->displayOrder;
+    }
+
+    public function setDisplayOrder(?int $displayOrder): void
+    {
+        $this->displayOrder = $displayOrder;
     }
 }
