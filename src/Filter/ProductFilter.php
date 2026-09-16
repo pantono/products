@@ -5,10 +5,11 @@ namespace Pantono\Products\Filter;
 use Pantono\Database\Traits\Pageable;
 use Pantono\Contracts\Filter\PageableInterface;
 use Pantono\Products\Model\ProductStatus;
-use Pantono\Products\Model\Category;
 use Pantono\Database\Traits\ColumnFilter;
+use Pantono\Contracts\Application\Interfaces\SortableInterface;
+use Pantono\Database\Filter\SortableFilter;
 
-class ProductFilter implements PageableInterface
+class ProductFilter extends SortableFilter implements PageableInterface, SortableInterface
 {
     use Pageable, ColumnFilter;
 
@@ -20,6 +21,14 @@ class ProductFilter implements PageableInterface
     private array $categoryIds = [];
     private ?string $orderBy = null;
 
+    public function getSortableFields(): array
+    {
+        return [
+            'p.stock_holding', 'p.code', 'p.slug', 'p.date_created',
+            'published.title', 'published.price', 'published.date_added', 'published_status.name', 'published.weight', 'published.rrp',
+            'draft.title', 'draft.price', 'draft.date_added', 'draft_status.name', 'draft.weight', 'draft.rrp',
+        ];
+    }
 
     public function getStatus(): ?ProductStatus
     {
