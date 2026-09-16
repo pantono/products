@@ -24,7 +24,7 @@ class ProductFilter extends SortableFilter implements PageableInterface, Sortabl
     public function getSortableFields(): array
     {
         return [
-            'p.stock_holding', 'p.code', 'p.slug', 'p.date_created',
+            'p.id', 'p.stock_holding', 'p.code', 'p.slug', 'p.date_created',
             'published.title', 'published.price', 'published.date_added', 'published_status.name', 'published.weight', 'published.rrp',
             'draft.title', 'draft.price', 'draft.date_added', 'draft_status.name', 'draft.weight', 'draft.rrp',
         ];
