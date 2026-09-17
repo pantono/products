@@ -69,6 +69,9 @@ class ProductField
         if ($type === 'date') {
             return DateTimeParser::parseDate($this->getValue())?->format('Y-m-d');
         }
+        if ($type === 'datetime') {
+            return DateTimeParser::parseDate($this->getValue())?->format('Y-m-d H:i:s');
+        }
         return $this->getValue();
     }
 }
