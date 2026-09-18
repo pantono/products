@@ -47,11 +47,17 @@ class ProductPrice
 
     public function getPricePerItem(): float
     {
+        if ($this->getPrice() <= 0) {
+            return 0.0;
+        }
         return $this->getPrice() / $this->product->getItemsIncluded();
     }
 
     public function getPricePerItemIncVat(): float
     {
+        if ($this->getPriceIncVat() <= 0) {
+            return 0.0;
+        }
         return $this->getPriceIncVat() / $this->product->getItemsIncluded();
     }
 
