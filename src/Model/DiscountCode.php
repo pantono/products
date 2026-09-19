@@ -16,8 +16,8 @@ class DiscountCode
     private string $code;
     #[FieldName('discount_id'), OneToOne(targetModel: Discount::class)]
     private ?Discount $discount = null;
-    private ?\DateTime $startDate = null;
-    private ?\DateTime $endDate = null;
+    private \DateTimeImmutable $startDate;
+    private \DateTimeImmutable $endDate;
     private int $maxUses;
 
     public function getId(): ?int
@@ -50,24 +50,24 @@ class DiscountCode
         $this->discount = $discount;
     }
 
-    public function getStartDate(): ?\DateTime
-    {
-        return $this->startDate;
-    }
-
-    public function setStartDate(?\DateTime $startDate): void
-    {
-        $this->startDate = $startDate;
-    }
-
-    public function getEndDate(): ?\DateTime
+    public function getEndDate(): \DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTime $endDate): void
+    public function setEndDate(\DateTimeImmutable $endDate): void
     {
         $this->endDate = $endDate;
+    }
+
+    public function getStartDate(): \DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeImmutable $startDate): void
+    {
+        $this->startDate = $startDate;
     }
 
     public function getMaxUses(): int
