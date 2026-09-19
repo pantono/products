@@ -30,6 +30,7 @@ class Discount
      */
     #[OneToMany(targetModel: DiscountRule::class, mappedBy: 'discount_id')]
     private array $rules = [];
+    private bool $deleted = false;
 
     public function getId(): ?int
     {
@@ -185,5 +186,15 @@ class Discount
             }
         }
         return $valid;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deleted = $deleted;
     }
 }
