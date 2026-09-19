@@ -10,6 +10,7 @@ use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Model\SpecialOffer;
 use Doctrine\DBAL\ArrayParameterType;
 use Pantono\Products\Filter\DiscountFilter;
+use Pantono\Products\Filter\DiscountCodeFilter;
 
 class DiscountsRepository extends DefaultRepository
 {
@@ -187,5 +188,41 @@ class DiscountsRepository extends DefaultRepository
     public function getDiscountBaseList(): array
     {
         return $this->selectAll('discount_base', 'name ASC');
+    }
+
+    /**
+     * @return array<int,mixed>
+     */
+    public function getDiscountCodesByFilter(DiscountCodeFilter $filter): array
+    {
+        $select = $this->getDb()->select('c.*')->from('discount_code', 'c')
+            ->innerJoin('c', 'discount', 'd', 'c.discount_id=d.id')
+            ->innerJoin('db', 'discount_base', 'db', 'd.base_id=db.id');
+
+        if ($filter->getSearch() !== null) {
+            $select->andWhere('code like :search')
+                ->setParameter('search', '%' . $filter->getSearch() . '%');
+        }
+
+        if ($filter->getDiscount() !== null) {
+            $select->andWhere('c.discount_id=:discount')
+                ->setParameter('discount', $filter->getDiscount()->getId());
+        }
+
+        if ($filter->getDiscountBase()) {
+            $select->andWhere('c.base_id=:base_id')
+                ->setParameter('base_id', $filter->getDiscountBase()->getId());
+        }
+
+        if ($filter->getDate() !== null) {
+            $select->andWhere('c.start_date <= :date')
+                ->andWhere('c.end_date >= :date')
+                ->setParameter('date', $filter->getDate());
+        }
+
+        $this->applyLimit($select, $filter);
+        $this->applySort($select, $filter);
+
+        return $this->getDb()->fetchAll($select);
     }
 }
