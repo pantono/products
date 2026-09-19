@@ -172,6 +172,10 @@ class DiscountsRepository extends DefaultRepository
                 ->setParameter('spend', $filter->getMinSpendBetween());
         }
 
+        if ($filter->isIncludeDeleted() === false) {
+            $select->andWhere('d.deleted = FALSE or d.deleted IS NULL');
+        }
+
         $this->applySort($select, $filter);
         $this->applyLimit($select, $filter);
         return $this->getDb()->fetchAll($select);
