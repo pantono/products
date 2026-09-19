@@ -20,6 +20,7 @@ use Pantono\Products\Filter\ProductFilter;
 use Pantono\Products\Model\ProductStatus;
 use Pantono\Products\Event\PreSpecialOfferSaveEvent;
 use Pantono\Products\Event\PostSpecialOfferSaveEvent;
+use Pantono\Products\Filter\DiscountFilter;
 
 class ProductDiscounts
 {
@@ -57,6 +58,14 @@ class ProductDiscounts
     public function getDiscountBaseById(int $id): ?DiscountBase
     {
         return $this->hydrator->hydrate(DiscountBase::class, $this->repository->getDiscountBaseById($id));
+    }
+
+    /**
+     * @return DiscountBase[]
+     */
+    public function getDiscountBaseList(): array
+    {
+        return $this->hydrator->hydrateSet(DiscountBase::class, $this->repository->getDiscountBaseList());
     }
 
     public function getDiscountById(int $id): ?Discount
@@ -135,6 +144,14 @@ class ProductDiscounts
     public function addProductToOffer(ProductVersion $version, SpecialOffer $offer): void
     {
         $this->repository->addProductToOffer($version, $offer);
+    }
+
+    /**
+     * @return Discount[]
+     */
+    public function getDiscountsByFilter(DiscountFilter $filter): array
+    {
+        return $this->hydrator->hydrateSet(Discount::class, $this->repository->getDiscountsByFilter($filter));
     }
 
     public function updateAllOfferProducts(SpecialOffer $offer): int

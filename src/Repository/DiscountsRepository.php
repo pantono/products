@@ -9,6 +9,7 @@ use Pantono\Products\Filter\SpecialOfferFilter;
 use Pantono\Products\Model\ProductVersion;
 use Pantono\Products\Model\SpecialOffer;
 use Doctrine\DBAL\ArrayParameterType;
+use Pantono\Products\Filter\DiscountFilter;
 
 class DiscountsRepository extends DefaultRepository
 {
@@ -144,5 +145,43 @@ class DiscountsRepository extends DefaultRepository
         if ($id) {
             $offer->setId($id);
         }
+    }
+
+    /**
+     * @param DiscountFilter $filter
+     * @return array<int,mixed>
+     */
+    public function getDiscountsByFilter(DiscountFilter $filter): array
+    {
+        $select = $this->getDb()->select('d.*')->from('discount', 'd');
+        if ($filter->getActive() !== null) {
+            $select->andWhere('d.live=:live')
+                ->setParameter('live', $filter->getActive());
+        }
+        if ($filter->getSearch() !== null) {
+            $select->andWhere('d.name LIKE :search')
+                ->setParameter('search', '%' . $filter->getSearch() . '%');
+        }
+
+        if ($filter->getBase() !== null) {
+            $select->andWhere('d.base_id=:base')
+                ->setParameter('base', $filter->getBase()->getId());
+        }
+        if ($filter->getMinSpendBetween() !== null) {
+            $select->andWhere('min_spend <= :spend and max_spend >= :spend')
+                ->setParameter('spend', $filter->getMinSpendBetween());
+        }
+
+        $this->applySort($select, $filter);
+        $this->applyLimit($select, $filter);
+        return $this->getDb()->fetchAll($select);
+    }
+
+    /**
+     * @return array<int,mixed>
+     */
+    public function getDiscountBaseList(): array
+    {
+        return $this->selectAll('discount_base', 'name ASC');
     }
 }
