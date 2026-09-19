@@ -15,6 +15,7 @@ class DiscountFilter extends SortableFilter implements PageableInterface
     private ?bool $minSpendBetween = null;
     private ?DiscountBase $base = null;
     private ?bool $active = null;
+    private bool $includeDeleted = false;
 
     public function getSearch(): ?string
     {
@@ -56,11 +57,20 @@ class DiscountFilter extends SortableFilter implements PageableInterface
         $this->active = $active;
     }
 
+    public function isIncludeDeleted(): bool
+    {
+        return $this->includeDeleted;
+    }
+
+    public function setIncludeDeleted(bool $includeDeleted): void
+    {
+        $this->includeDeleted = $includeDeleted;
+    }
+
     public function getSortableFields(): array
     {
         return [
-            ''
+            'd.id', 'd.amount', 'd.min_spend', 'd.max_spend', 'd.priority'
         ];
-        // TODO: Implement getSortableFields() method.
     }
 }
