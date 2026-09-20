@@ -19,6 +19,7 @@ class DiscountCode
     private \DateTimeImmutable $startDate;
     private \DateTimeImmutable $endDate;
     private int $maxUses;
+    private bool $deleted = false;
 
     public function getId(): ?int
     {
@@ -78,5 +79,15 @@ class DiscountCode
     public function setMaxUses(int $maxUses): void
     {
         $this->maxUses = $maxUses;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deleted = $deleted;
     }
 }
