@@ -22,6 +22,7 @@ use Pantono\Products\Event\PreSpecialOfferSaveEvent;
 use Pantono\Products\Event\PostSpecialOfferSaveEvent;
 use Pantono\Products\Filter\DiscountFilter;
 use Pantono\Products\Filter\DiscountCodeFilter;
+use Pantono\Products\Model\Product;
 
 class ProductDiscounts
 {
@@ -166,10 +167,34 @@ class ProductDiscounts
     public function updateAllOfferProducts(SpecialOffer $offer): int
     {
         $this->repository->clearProductsForOffer($offer);
+        $total = 0;
+        if ($offer->getDiscount()) {
+            foreach ($this->getProductsForDiscount($offer->getDiscount()) as $product) {
+                if ($product->getPublishedDraft()) {
+                    $this->addProductToOffer($product->getPublishedDraft(), $offer);
+                    $total++;
+                }
+            }
+        }
+        return $total;
+    }
+
+    /**
+     * @param Discount $discount
+     * @return Product[]
+     */
+    public function getProductsForDiscount(Discount $discount): array
+    {
+        $filter = $this->getProductFilterForDiscount($discount);
+        $filter->setPerPage(99999);
+        return $this->products->getProductsByFilter($filter);
+    }
+
+    public function getProductFilterForDiscount(Discount $discount): ProductFilter
+    {
         $filter = new ProductFilter();
-        $filter->setTotalResults(99999);
         $filter->setStatus($this->hydrator->lookupRecord(ProductStatus::class, ProductApproval::STATUS_APPROVED));
-        $rules = $offer->getDiscount() ? $offer->getDiscount()->getRules() : [];
+        $rules = $discount->getRules();
         foreach ($rules as $rule) {
             $value = $rule->getValue();
             if ($rule->getOperand() === 'in' || $rule->getReverseOperand() === 'in') {
@@ -177,11 +202,6 @@ class ProductDiscounts
             }
             $filter->addColumn($rule->getField(), $value, $rule->isInclude() ? $rule->getOperand() : $rule->getReverseOperand());
         }
-        $total = 0;
-        foreach ($this->products->getProductsByFilter($filter) as $product) {
-            $this->addProductToOffer($product->getPublishedDraft(), $offer);
-            $total++;
-        }
-        return $total;
+        return $filter;
     }
 }
