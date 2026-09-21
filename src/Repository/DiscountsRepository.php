@@ -197,7 +197,7 @@ class DiscountsRepository extends DefaultRepository
     {
         $select = $this->getDb()->select('c.*')->from('discount_code', 'c')
             ->innerJoin('c', 'discount', 'd', 'c.discount_id=d.id')
-            ->innerJoin('db', 'discount_base', 'db', 'd.base_id=db.id');
+            ->innerJoin('d', 'discount_base', 'db', 'd.base_id=db.id');
 
         if ($filter->getSearch() !== null) {
             $select->andWhere('code like :search')
