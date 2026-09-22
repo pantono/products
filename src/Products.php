@@ -66,6 +66,11 @@ class Products
         });
     }
 
+    public function getDefaultVatRate(): ?ProductVatRate
+    {
+        return $this->hydrator->hydrate(ProductVatRate::class, $this->repository->getDefaultVatRate());
+    }
+
     /**
      * @return ProductVatRate[]
      */

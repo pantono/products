@@ -156,7 +156,7 @@ class ProductsRepository extends DefaultRepository
             ->leftJoin('published', 'product_status', 'published_status', 'published.status_id=published_status.id')
             ->leftJoin('p', 'product_version', 'draft', 'draft.id=p.draft_id')
             ->leftJoin('draft', 'product_status', 'draft_status', 'draft.status_id=draft_status.id');
-        
+
         $this->applySort($select, $filter);
 
         if ($filter->getOrderBy()) {
@@ -278,5 +278,10 @@ class ProductsRepository extends DefaultRepository
     public function getFieldTypeByName(string $name): ?array
     {
         return $this->selectSingleRow('product_field_type', 'name', $name);
+    }
+
+    public function getDefaultVatRate(): ?array
+    {
+        return $this->selectSingleRow('product_vat_rate', 'default', true);
     }
 }
