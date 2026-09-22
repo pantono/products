@@ -10,6 +10,7 @@ class ProductVatRate
     private ?int $id = null;
     private string $name;
     private float $rate;
+    private bool $default = false;
 
     public function getId(): ?int
     {
@@ -54,5 +55,15 @@ class ProductVatRate
     public function calculateVat(float $price): float
     {
         return $price - $this->calculateNet($price);
+    }
+
+    public function isDefault(): bool
+    {
+        return $this->default;
+    }
+
+    public function setDefault(bool $default): void
+    {
+        $this->default = $default;
     }
 }
