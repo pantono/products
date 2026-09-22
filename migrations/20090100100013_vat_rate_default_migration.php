@@ -9,10 +9,10 @@ final class VatRateDefaultMigration extends BasePantonoMigration
     public function change(): void
     {
         $this->tablePrefix('product_vat_rate')
-            ->addColumn('default', 'boolean', ['default' => false])
+            ->addColumn('default_rate', 'boolean', ['default' => false])
             ->update();
         if ($this->isMigratingUp()) {
-            $this->query('UPDATE product_vat_rate SET default = TRUE WHERE id = 1');
+            $this->query('UPDATE product_vat_rate SET default_rate = TRUE WHERE id = 1');
         }
     }
 }
