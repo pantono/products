@@ -282,6 +282,6 @@ class ProductsRepository extends DefaultRepository
 
     public function getDefaultVatRate(): ?array
     {
-        return $this->selectSingleRow('product_vat_rate', 'default', 1);
+        return $this->selectSingleRow('product_vat_rate', 'default_rate', 1);
     }
 }
